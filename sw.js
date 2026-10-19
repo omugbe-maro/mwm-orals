@@ -1,5 +1,5 @@
 // MWM Orals offline support. The cache name changes whenever the site or content changes.
-const CACHE = 'mwm-orals-0075013bd7';
+const CACHE = 'mwm-orals-0e1243e1a3';
 const PRECACHE = ["./", "index.html", "content.json", "manifest.webmanifest", "brand/icon-192.png", "brand/icon-512.png", "vendor/supabase-2.117.2.js", "fonts/barlow-condensed-latin-600-normal.woff2", "fonts/barlow-condensed-latin-700-normal.woff2", "fonts/ibm-plex-sans-latin-400-normal.woff2", "fonts/ibm-plex-sans-latin-500-normal.woff2", "fonts/ibm-plex-sans-latin-600-normal.woff2", "fonts/ibm-plex-mono-latin-500-normal.woff2"];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(PRECACHE)).then(() => self.skipWaiting()));
