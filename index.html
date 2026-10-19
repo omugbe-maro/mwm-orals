@@ -271,6 +271,29 @@ a.btn{text-decoration:none;color:inherit}
 .about a:not(.btn),.panel a:not(.btn){color:var(--accent)}
 .about .sec{display:flex;flex-direction:column;gap:8px}
 .copied{font-size:13px;color:var(--ok);font-weight:600}
+.acct-btn{background:none;border:1px solid rgba(255,255,255,.35);color:var(--navy-ink);padding:7px 12px;border-radius:999px;font-weight:600;display:flex;align-items:center;gap:8px;margin-left:8px;min-height:40px}
+.acct-btn:hover,.acct-btn[aria-current="page"]{background:rgba(255,255,255,.12)}
+.acct-btn .av{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:13px;font-weight:700}
+.acct-btn svg{width:18px;height:18px}
+@media (max-width:860px){.about-btn{margin-left:auto}.acct-btn{margin-left:2px;padding:6px 10px}.acct-btn .nm{display:none}}
+.auth{max-width:460px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.authtabs{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.authtabs button{background:var(--surface);border:0;padding:11px;font-weight:600;min-height:44px}
+.authtabs button[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:14px;font-weight:600}
+.field input,.field select{font:inherit;padding:11px 12px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--ink);min-height:46px;width:100%}
+.field input:focus,.field select:focus{outline:3px solid var(--accent);outline-offset:1px}
+.field .hint{font-size:13px;color:var(--muted)}
+.pw{position:relative}.pw input{padding-right:70px}.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--accent);font-weight:600;font-size:14px;padding:6px}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px}.check input{width:20px;height:20px;margin-top:2px;flex:none}
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;background:#FFFFFF;color:#1F1F1F;border:1px solid #747775;border-radius:7px;min-height:46px;font-weight:600;width:100%}
+.gbtn:hover{background:#F6F8FA}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+.msg{border-radius:8px;padding:11px 13px;font-size:14px}.msg.ok{background:var(--ok-soft)}.msg.bad{background:var(--bad-soft)}.msg.info{background:var(--surface-2)}
+.danger{border-color:var(--bad)!important;color:var(--bad)}
+.btn.danger-fill{background:var(--bad);border-color:var(--bad);color:#fff}
+.kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 14px;margin:0}.kv dt{color:var(--muted);font-size:14px}.kv dd{margin:0;font-weight:500;overflow-wrap:anywhere}
 .urlbox{font-family:var(--mono);font-size:13px;width:100%;max-width:440px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2)}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -283,12 +306,14 @@ a.btn{text-decoration:none;color:inherit}
   </button>
   <nav class="tabs" id="tabs" aria-label="Sections"></nav>
   <button class="about-btn" type="button" data-nav="about" id="about-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>About</span></button>
+  <button class="acct-btn" type="button" data-nav="account" id="acct-btn" hidden></button>
 </div></header>
 <main id="main" aria-live="polite"></main>
 <footer class="foot" id="foot"></footer>
 <nav class="botnav" id="botnav" aria-label="Sections"></nav>
 <div id="modal-root"></div>
 
+<script src="vendor/supabase-2.117.2.js"></script>
 <script type="application/json" id="content"></script>
 <script>
 (function(){
@@ -318,7 +343,8 @@ const TAGS = C.meta.tags;
 const KEY = 'mwm-orals-v1';
 let S = {studied:{}, checks:{}, enc:{}, tags:{}, oral:[]};
 try { const raw = localStorage.getItem(KEY); if(raw){ S = Object.assign(S, JSON.parse(raw)); } } catch(e){}
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function save(){ saveLocal(); if(typeof schedulePush==='function') schedulePush(); }
 function tagScore(tag, v){ const t = S.tags[tag] || (S.tags[tag] = {n:0, sum:0}); t.n++; t.sum += v; }
 
 /* ---------------- icons ---------------- */
@@ -334,31 +360,65 @@ const NAV = [['home','Home'],['rules','Study'],['enc','Encounters'],['oral','Moc
 const CT = C.meta.contact || {};
 const SITE = CT.siteUrl || (location.origin + location.pathname);
 const WA = String(CT.whatsapp||'').replace(/[^0-9]/g,'');
-const hashOf = v => ({home:'', rules:'study', topic:v.param, enc:'encounters', encrun:v.param, oral:'oral', oralrun:'oral', oralres:'oral', about:'about'}[v.name] || '');
+const hashOf = v => ({home:'', rules:'study', topic:v.param, enc:'encounters', encrun:v.param, oral:'oral', oralrun:'oral', oralres:'oral', about:'about', account:'account'}[v.name] || '');
 function parseHash(){
   const h=(location.hash||'').replace(/^#/,'');
   if(h==='study') return {name:'rules'};
   if(h==='encounters') return {name:'enc'};
   if(h==='oral') return {name:'oral'};
   if(h==='about') return {name:'about'};
+  if(h==='account') return {name:'account'};
   if(TBY[h]) return {name:'topic',param:h};
   if(EBY[h]) return {name:'encrun',param:h};
   return {name:'home'};
 }
 let view = parseHash();
+/* ---------------- visitor statistics (Umami: no cookies, no personal data) ---------------- */
+const AN = C.meta.analytics || {};
+const AN_KEY = 'mwm-no-analytics';
+function anOptedOut(){ try{ return localStorage.getItem(AN_KEY)==='1'; }catch(e){ return false; } }
+function anDNT(){ return navigator.doNotTrack==='1' || window.doNotTrack==='1' || navigator.msDoNotTrack==='1'; }
+const AN_ON = !!(window.MWM_PWA && AN.websiteId && AN.scriptUrl);
+const anQueue=[]; let anLoaded=false, anFirst=true;
+function anActive(){ return AN_ON && !anOptedOut() && !anDNT() && (!AN.domains || String(AN.domains).split(',').map(x=>x.trim()).includes(location.hostname)); }
+function anLoad(){
+  if(anLoaded || !anActive()) return; anLoaded=true;
+  const sc=document.createElement('script'); sc.defer=true; sc.src=AN.scriptUrl;
+  sc.setAttribute('data-website-id', AN.websiteId); sc.setAttribute('data-auto-track','false'); sc.setAttribute('data-do-not-track','true');
+  if(AN.domains) sc.setAttribute('data-domains', AN.domains);
+  sc.onload=()=>{ while(anQueue.length){ const f=anQueue.shift(); try{ f(); }catch(e){} } };
+  document.head.appendChild(sc);
+}
+function anSend(f){ if(!anActive()) return; anLoad(); if(window.umami && typeof window.umami.track==='function'){ try{ f(); }catch(e){} } else anQueue.push(f); }
+const pathOf = v => ({home:'/', rules:'/study', topic:'/study/'+v.param, enc:'/encounters', encrun:'/encounters/'+v.param, oral:'/mock-oral', oralrun:'/mock-oral/session', oralres:'/mock-oral/result', about:'/about', account:'/account'}[v.name] || '/');
+function titleOf(v){
+  const T=' · MWM Orals';
+  if(v.name==='topic'&&TBY[v.param]){ const t=TBY[v.param]; return (t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)+': '+t.title+T; }
+  if(v.name==='encrun'&&EBY[v.param]) return v.param+' '+EBY[v.param].title+T;
+  return ({home:'MWM Orals: COLREGs & Buoyage for the OOW oral', rules:'Study the Rules'+T, enc:'Encounter trainer'+T, oral:'Mock oral'+T, oralrun:'Mock oral'+T, oralres:'Mock oral result'+T, about:'About'+T, account:'Account'+T})[v.name] || 'MWM Orals';
+}
+function trackView(){
+  const extra = anFirst ? location.search.replace(/([?&])(code|error|error_description|access_token)=[^&]*/g,'$1').replace(/[?&]+$/,'') : '';
+  const url=pathOf(view)+extra, title=titleOf(view); anFirst=false;
+  anSend(()=>window.umami.track(props=>Object.assign({},props,{url,title})));
+}
+function trackEvent(name,data){ anSend(()=>window.umami.track(name, data||{})); }
+function evAttr(name,data){ return `data-ev="${esc(name)}" data-ev-data="${esc(JSON.stringify(data||{}))}"`; }
+document.addEventListener('click',e=>{ const a=e.target.closest('[data-ev]'); if(a){ let d={}; try{ d=JSON.parse(a.dataset.evData||'{}'); }catch(_){} trackEvent(a.dataset.ev,d); } });
 function go(name, param){
   view = {name, param};
   const h = hashOf(view), cur = (location.hash||'').replace(/^#/,'');
   if(h!==cur){ try{ history.pushState(null,'',h?'#'+h:location.pathname+location.search); }catch(e){} }
-  render(); window.scrollTo(0,0);
+  render(); window.scrollTo(0,0); trackView();
 }
-window.addEventListener('popstate',()=>{ const v=parseHash(); view = (session && v.name==='oral') ? {name:'oralrun'} : v; render(); });
-function navKey(){ return {home:'home', rules:'rules', topic:'rules', enc:'enc', encrun:'enc', oral:'oral', oralrun:'oral', oralres:'oral', about:'about'}[view.name] || 'home'; }
+window.addEventListener('popstate',()=>{ const v=parseHash(); view = (session && v.name==='oral') ? {name:'oralrun'} : v; render(); trackView(); });
+function navKey(){ return {home:'home', rules:'rules', topic:'rules', enc:'enc', encrun:'enc', oral:'oral', oralrun:'oral', oralres:'oral', about:'about', account:'account'}[view.name] || 'home'; }
 function renderNav(){
   const k = navKey();
   const b = NAV.map(([id,l]) => `<button type="button" data-nav="${id}" ${k===id?'aria-current="page"':''}>${ICON[id]}<span>${l}</span></button>`).join('');
   $('tabs').innerHTML = b; $('botnav').innerHTML = b;
   if(k==='about') $('about-btn').setAttribute('aria-current','page'); else $('about-btn').removeAttribute('aria-current');
+  if(typeof renderAcctBtn==='function') renderAcctBtn();
 }
 /* contact helpers */
 function mailHref(subject, body){ return CT.email ? `mailto:${CT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` : ''; }
@@ -367,16 +427,17 @@ function reportHTML(id, label){
   const m = mailHref(`MWM Orals: possible mistake in ${id}`, `Item: ${id} (${label})\n\nWhat looks wrong:\n\nWhat it should say (rule reference if you have one):\n`);
   const w = waHref(`MWM Orals: possible mistake in ${id} (${label}). `);
   if(!m && !w) return '';
-  return `<div class="report"><span>Spotted a mistake in ${esc(id)}?</span>${w?`<a href="${w}" target="_blank" rel="noopener">Tell us on WhatsApp</a>`:''}${m?`<a href="${m}">Email us</a>`:''}</div>`;
+  return `<div class="report"><span>Spotted a mistake in ${esc(id)}?</span>${w?`<a href="${w}" target="_blank" rel="noopener" ${evAttr('report-mistake',{item:id,channel:'whatsapp'})}>Tell us on WhatsApp</a>`:''}${m?`<a href="${m}" ${evAttr('report-mistake',{item:id,channel:'email'})}>Email us</a>`:''}</div>`;
 }
-function coachHTML(){
+function coachHTML(place){
   const w = waHref('Hello Maro, I would like to book a live mock OOW oral.');
   const m = mailHref('Booking a live mock OOW oral', 'Hello Maro,\n\nI would like to book a live mock OOW oral. My exam date is:\n');
   if(!w && !m) return '';
-  return `<section class="cta"><div><h3>Want a live mock oral?</h3><p>Sit a one-to-one mock OOW oral online with a Master Mariner, with feedback on every answer.</p></div><a class="btn" href="${w||m}" ${w?'target="_blank" rel="noopener"':''}>${w?'Book on WhatsApp':'Book by email'}</a></section>`;
+  return `<section class="cta"><div><h3>Want a live mock oral?</h3><p>Sit a one-to-one mock OOW oral online with a Master Mariner, with feedback on every answer.</p></div><a class="btn" href="${w||m}" ${w?'target="_blank" rel="noopener"':''} ${evAttr('coaching-click',{channel:w?'whatsapp':'email',place:place||'other'})}>${w?'Book on WhatsApp':'Book by email'}</a></section>`;
 }
 function copyLink(btn, url){
   const done=()=>{ btn.textContent='Link copied'; setTimeout(()=>{ if(btn.isConnected) btn.textContent=btn.dataset.label; },2000); };
+  trackEvent('copy-link',{item:(url.split('#')[1]||'home')});
   try{ navigator.clipboard.writeText(url).then(done).catch(()=>fallback()); }catch(e){ fallback(); }
   function fallback(){ const i=document.createElement('input'); i.className='urlbox'; i.value=url; i.readOnly=true; btn.replaceWith(i); i.focus(); i.select(); }
 }
@@ -393,12 +454,13 @@ document.addEventListener('click', e => {
 $('brand').onclick = () => go('home');
 
 function render(){
+  try{ document.title=titleOf(view); }catch(e){}
   renderNav();
   const m = $('main');
   stopLamps();
   if(view.name==='oralrun' && !session) view={name:'oral'};
   if(view.name==='oralres' && !view.param) view={name:'oral'};
-  ({home:vHome, rules:vRules, topic:vTopic, enc:vEnc, encrun:vEncRun, oral:vOral, oralrun:vOralRun, oralres:vOralRes, about:vAbout}[view.name] || vHome)(m);
+  ({home:vHome, rules:vRules, topic:vTopic, enc:vEnc, encrun:vEncRun, oral:vOral, oralrun:vOralRun, oralres:vOralRes, about:vAbout, account:vAccount}[view.name] || vHome)(m);
   startLamps();
 }
 
@@ -536,6 +598,7 @@ function answerBlock(card){
 /* picture viewer (from study topics) */
 function openPicture(pid){
   const card=PBY[pid]; if(!card) return;
+  trackEvent('picture-opened',{picture:pid});
   const root=$('modal-root');
   root.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="Picture ${esc(card.id)}"><div class="box">
     <div class="mh"><span class="eyebrow">${esc(card.id)} · ${esc(TAGS[card.tag])}</span><button class="btn ghost" type="button" data-close>Close</button></div>
@@ -660,11 +723,12 @@ function vHome(m){
       <div class="row"><button class="btn primary" type="button" data-nav="oral">Start a mock oral</button><button class="btn" type="button" data-nav="rules">Study the Rules</button></div>
     </div>
     <div class="panel meters" aria-label="Your progress">
-      <span class="eyebrow">Your progress on this device</span>
+      <span class="eyebrow">${USER?'Your progress · saved to your account':'Your progress on this device'}</span>
       <div class="meter"><div class="lab"><span>Rules and buoyage topics studied</span><b>${studied} / ${TOPICS.length}</b></div><div class="bar"><i style="width:${pct(studied,TOPICS.length)}%"></i></div></div>
       <div class="meter"><div class="lab"><span>Encounters solved</span><b>${encOk} / ${ENC.length}</b></div><div class="bar"><i style="width:${pct(encOk,ENC.length)}%"></i></div></div>
       <div class="meter"><div class="lab"><span>Mock orals sat</span><b>${S.oral.length}${best!=null?` · best ${best}%`:''}</b></div><div class="bar"><i style="width:${best||0}%"></i></div></div>
       ${last?`<p class="small muted">Last mock oral: ${last.pct}%, ${esc(last.verdict)} (${esc(last.date)})</p>`:'<p class="small muted">No mock oral yet. Your scores will show here.</p>'}
+      ${AUTH_ON&&!USER?`<p class="small">Saved on this device only. <a href="#account" data-nav="account" style="color:var(--accent);font-weight:600">Create a free account</a> to keep it on any phone or laptop.</p>`:''}
     </div>
   </section>
   <section class="modes">
@@ -676,7 +740,7 @@ function vHome(m){
     <h2 style="font-size:24px">Weak areas</h2>
     ${weak.length?`<div class="weak">${weak.map(w=>`<button type="button" data-weak="${w.t}">${esc(TAGS[w.t])} <b>${w.p}%</b></button>`).join('')}</div><p class="small muted">Based on your quick checks, encounters and mock oral marks. Tap one to study it.</p>`:'<p class="empty">Nothing flagged yet. Areas where you score under 75% will appear here.</p>'}
   </section>
-  ${coachHTML()}
+  ${coachHTML('home')}
   <p class="disclaimer">${esc(C.meta.disclaimer)}</p>`;
   m.querySelectorAll('[data-weak]').forEach(b=>b.onclick=()=>{ const t=firstTopicForTag(b.dataset.weak); if(t) go('topic',t.id); });
 }
@@ -723,12 +787,12 @@ function vTopic(m){
   <div class="pager">${prev?`<button class="btn" type="button" data-topic="${prev.id}">&larr; ${esc(prev.group==='ANX'||prev.group==='BUOY'?prev.num:'Rule '+prev.num)}</button>`:'<span></span>'}${next?`<button class="btn" type="button" data-topic="${next.id}">${esc(next.group==='ANX'||next.group==='BUOY'?next.num:'Rule '+next.num)} &rarr;</button>`:''}</div>`;
   m.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>go('topic',b.dataset.topic));
   m.querySelectorAll('[data-pic]').forEach(b=>b.onclick=()=>openPicture(b.dataset.pic));
-  $('mark').onclick=()=>{ if(S.studied[t.id]) delete S.studied[t.id]; else S.studied[t.id]=Date.now(); save(); vTopic(m); };
+  $('mark').onclick=()=>{ if(S.studied[t.id]) delete S.studied[t.id]; else { S.studied[t.id]=Date.now(); trackEvent('topic-studied',{topic:t.id}); } save(); vTopic(m); };
   m.querySelectorAll('#check .opt').forEach(b=>b.onclick=()=>{
     const k=Number(b.dataset.k), ok=k===t.check.answer;
     m.querySelectorAll('#check .opt').forEach(x=>{ x.disabled=true; const kk=Number(x.dataset.k); if(kk===t.check.answer) x.classList.add('right'); else if(kk===k) x.classList.add('wrong'); });
     $('check-fb').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Correct.':'Not quite.'}</b><span>${esc(t.check.why)}</span></div>`;
-    if(S.checks[t.id]===undefined) tagScore(t.tag, ok?1:0);
+    if(S.checks[t.id]===undefined){ tagScore(t.tag, ok?1:0); trackEvent('quick-check',{topic:t.id,result:ok?'right':'wrong'}); }
     S.checks[t.id]=ok; save();
   });
 }
@@ -769,7 +833,7 @@ function vEncRun(m){
   <section class="panel step" id="s2" hidden><span class="eyebrow">Step 2 of 2</span><h3>What do you do?</h3>${mcqHTML('mcq2',e.action.options,o2)}<div id="fb2"></div></section>
   <div id="enc-share" hidden class="stack" style="gap:6px">${shareRow(e.id, 'encounter '+e.id)}${reportHTML('encounter '+e.id, e.title)}</div>
   <div class="pager" id="enc-pager" hidden><button class="btn" type="button" id="retry">Try this one again</button><button class="btn primary" type="button" data-enc="${next.id}">Next encounter: ${next.id} &rarr;</button></div>`;
-  const pb=$('play'); if(pb) pb.onclick=()=>playPattern(e.sound,null,pb);
+  const pb=$('play'); if(pb) pb.onclick=()=>{ playPattern(e.sound,null,pb); trackEvent('signal-played',{item:e.id}); };
   const wire=(id,spec,cb)=>m.querySelectorAll(`#${id} .opt`).forEach(b=>b.onclick=()=>{
     const k=Number(b.dataset.k), ok=k===spec.answer;
     m.querySelectorAll(`#${id} .opt`).forEach(x=>{ x.disabled=true; const kk=Number(x.dataset.k); if(kk===spec.answer) x.classList.add('right'); else if(kk===k) x.classList.add('wrong'); });
@@ -782,6 +846,7 @@ function vEncRun(m){
     const solved=first&&second, prevRec=S.enc[e.id];
     if(!prevRec) tagScore(e.tag, solved?1:0);
     S.enc[e.id]={ok:solved||(prevRec&&prevRec.ok)||false, tries:(prevRec?prevRec.tries:0)+1, last:solved}; save();
+    trackEvent('encounter-done',{encounter:e.id,result:solved?'solved':'missed'});
     $('enc-pager').hidden=false; $('enc-share').hidden=false;
   });
   m.querySelectorAll('[data-enc]').forEach(b=>b.onclick=()=>go('encrun',b.dataset.enc));
@@ -839,7 +904,7 @@ function vOral(m){
       ${S.oral.length?`<div class="hist">${S.oral.slice(0,8).map(o=>`<div class="hr"><span>${esc(o.date)}</span><span class="mono">${o.pct}%</span><span>${esc(o.verdict)}${o.critical?' · <span class="pill bad">critical miss</span>':''}</span></div>`).join('')}</div>`:'<p class="empty">No mock orals yet. Your results will be listed here.</p>'}
     </div>
   </div>`;
-  $('start').onclick=()=>{ session=buildSession(); go('oralrun'); };
+  $('start').onclick=()=>{ session=buildSession(); trackEvent('mock-oral-start'); go('oralrun'); };
 }
 function questionBody(it){
   if(it.kind==='picture'){ const p=PBY[it.ref]; return {media:`<div class="stage">${picSVG(p,false)}</div>`, ctx:p.scen, q:p.q, a:`<p><b>${esc(p.title)}</b>${p.char?` <span class="mono" style="color:var(--accent)">${esc(p.char)}</span>`:''}</p><p>${esc(p.sum)}</p>`}; }
@@ -868,7 +933,7 @@ function vOralRun(m){
       <div class="marks"><button class="m-got" type="button" data-mark="got">Got it</button><button class="m-partly" type="button" data-mark="partly">Partly</button><button class="m-missed" type="button" data-mark="missed">Missed</button></div></div>`
     :`<div class="row"><button class="btn primary" type="button" id="rev">I've answered: show the model answer</button></div>`}
   </section>`;
-  const pb=$('oplay'); if(pb){ const pat=it.kind==='sound'?SBY[it.ref].pattern:EBY[it.ref].sound, gap=it.kind==='sound'?SBY[it.ref].gapMs:null; pb.onclick=()=>playPattern(pat,gap,pb); }
+  const pb=$('oplay'); if(pb){ const pat=it.kind==='sound'?SBY[it.ref].pattern:EBY[it.ref].sound, gap=it.kind==='sound'?SBY[it.ref].gapMs:null; pb.onclick=()=>{ playPattern(pat,gap,pb); trackEvent('signal-played',{item:it.ref}); }; }
   const rv=$('rev'); if(rv) rv.onclick=()=>{ session.revealed=true; vOralRun(m); startLamps(); };
   $('quit').onclick=()=>{ if(session.q.some(x=>x.marks.length)) finishOral(); else { session=null; go('oral'); } };
   m.querySelectorAll('[data-mark]').forEach(b=>b.onclick=()=>{
@@ -888,8 +953,9 @@ function finishOral(){
   });
   const p=pct(got,max), verdict=C.meta.mockOral.verdicts.find(v=>p>=v.min).label;
   const d=new Date(), date=d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
-  const result={date, pct:p, verdict, critical:critical.length, byTag, items:session.q.map(it=>({kind:it.kind,ref:it.ref,marks:it.marks}))};
+  const result={ts:Date.now(), date, pct:p, verdict, critical:critical.length, byTag, items:session.q.map(it=>({kind:it.kind,ref:it.ref,marks:it.marks}))};
   S.oral.unshift(result); S.oral=S.oral.slice(0,20); save();
+  trackEvent('mock-oral-finish',{score:p>=80?'80-100':p>=60?'60-79':'0-59', critical:critical.length?'yes':'no', questions:session.q.filter(x=>x.marks.length).length});
   session=null; go('oralres', result);
 }
 function relatedTopic(it){
@@ -921,10 +987,10 @@ function vOralRes(m){
     <section class="panel stack"><h3 style="font-size:24px">By topic</h3><div class="tagbars">${tags.map(x=>`<div><div class="lab"><span>${esc(TAGS[x.t])}</span><span class="mono">${x.p}%</span></div><div class="bar"><i class="${x.p>=80?'ok':x.p>=60?'warn':'bad'}" style="width:${x.p}%"></i></div></div>`).join('')}</div></section>
     <section class="panel stack"><h3 style="font-size:24px">Review these</h3>${missed.length?`<div class="review">${missed.map(it=>{ const t=relatedTopic(it); return `<div class="it"><span class="pill ${it.marks[0]==='missed'?'bad':'warn'}">${it.marks[0]==='missed'?'Missed':'Partly'}</span><span><span style="font-weight:500">${esc(itemTitle(it))}</span>${t?`<br><button class="back" type="button" data-topic="${t.id}">Study ${esc(t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)}: ${esc(t.title)} &rarr;</button>`:''}</span></div>`; }).join('')}</div>`:'<p class="empty">Nothing to review: every question marked got it.</p>'}</section>
   </div>
-  ${coachHTML()}
+  ${coachHTML('mock-oral-result')}
   <div class="row"><button class="btn primary" type="button" id="again">Sit another mock oral</button><button class="btn" type="button" data-nav="home">Back to home</button></div>`;
   m.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>go('topic',b.dataset.topic));
-  $('again').onclick=()=>{ session=buildSession(); go('oralrun'); };
+  $('again').onclick=()=>{ session=buildSession(); trackEvent('mock-oral-start'); go('oralrun'); };
 }
 
 let resetArmed=false;
@@ -952,11 +1018,11 @@ function vAbout(m){
         <div class="row"><button class="btn" type="button" data-copy="${esc(SITE)}" data-label="Copy the website link">Copy the website link</button>${navigator.share?'<button class="btn" type="button" id="share">Share…</button>':''}</div></section>
     </div>
     <div class="stack">
-      ${coachHTML()}
+      ${coachHTML('about')}
       <section class="panel stack"><h3 style="font-size:22px">Contact and corrections</h3>
         <p>If you think a note or answer is wrong, please tell us with the topic or question ID (for example R19 or E05) and a rule reference.</p>
-        ${email?`<p>Email: ${email}</p>`:''}${WA?`<p><a class="linkbtn" href="${waHref('Hello Maro, about MWM Orals: ')}" target="_blank" rel="noopener">Message us on WhatsApp</a></p>`:''}
-        ${CT.youtube?`<p><a class="linkbtn" href="${esc(CT.youtube)}" target="_blank" rel="noopener">Watch Maritime With Maro on YouTube</a></p>`:''}</section>
+        ${email?`<p>Email: ${email}</p>`:''}${WA?`<p><a class="linkbtn" href="${waHref('Hello Maro, about MWM Orals: ')}" target="_blank" rel="noopener" ${evAttr('contact-click',{channel:'whatsapp'})}>Message us on WhatsApp</a></p>`:''}
+        ${CT.youtube?`<p><a class="linkbtn" href="${esc(CT.youtube)}" target="_blank" rel="noopener" ${evAttr('youtube-click',{place:'about'})}>Watch Maritime With Maro on YouTube</a></p>`:''}</section>
       <section class="panel stack"><h3 style="font-size:22px">Terms of use</h3><ul class="points small">
         <li>MWM Orals is a study aid only. Do not use it for navigation or watchkeeping decisions.</li>
         <li>It may contain errors. Always check the official COLREGs text, the IALA system and your company procedures.</li>
@@ -964,21 +1030,220 @@ function vAbout(m){
         <li>Notes, questions and drawings © 2026 Maritime With Maro.</li></ul>
         <p class="small"><a href="${esc(SITE)}terms.html" target="_blank" rel="noopener">Full terms of use</a> · <a href="${esc(SITE)}privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></section>
       <section class="panel stack"><h3 style="font-size:22px">Your data</h3>
-        <p class="small">Your progress is saved only in this browser on this device. Nothing is sent anywhere.</p>
+        <p class="small">${USER?'Your progress is saved in this browser and synced to your account, so it follows you to other devices.':(AUTH_ON?'Without an account, your progress is saved only in this browser on this device. With a free account it is synced so it follows you to other devices.':'Your progress is saved only in this browser on this device.')}</p>
+        ${AN_ON?`<p class="small">We count visits and actions anonymously with Umami, which uses no cookies and collects no personal information. We never see who you are.</p>
+        <label class="check"><input type="checkbox" id="an-opt" ${anOptedOut()?'':'checked'}><span>Include my visits in the anonymous statistics</span></label><p class="small muted" id="an-note">${anDNT()?'Your browser asks sites not to track you, so your visits are not counted.':''}</p>`:''}
         <div class="row"><button class="btn" type="button" id="reset">Reset my progress</button><span class="small muted" id="reset-note"></span></div>
         <p class="small muted">Study notes version ${esc(C.meta.version)}, updated ${esc(C.meta.updated)}.</p></section>
     </div>
   </div>`;
-  const ib=$('install'); if(ib) ib.onclick=async()=>{ try{ inst.prompt(); await inst.userChoice; }catch(e){} window.__mwmInstall=null; vAbout(m); };
-  const sb=$('share'); if(sb) sb.onclick=()=>{ navigator.share({title:'MWM Orals', text:'COLREGs and buoyage practice for the MCA OOW oral', url:SITE}).catch(()=>{}); };
+  const ib=$('install'); if(ib) ib.onclick=async()=>{ let out='unknown'; try{ inst.prompt(); const c=await inst.userChoice; out=(c&&c.outcome)||out; }catch(e){} trackEvent('install-app',{outcome:out}); window.__mwmInstall=null; vAbout(m); };
+  const sb=$('share'); if(sb) sb.onclick=()=>{ trackEvent('share-site'); navigator.share({title:'MWM Orals', text:'COLREGs and buoyage practice for the MCA OOW oral', url:SITE}).catch(()=>{}); };
+  const ao=$('an-opt'); if(ao) ao.onchange=()=>{ try{ if(ao.checked){ localStorage.removeItem(AN_KEY); localStorage.removeItem('umami.disabled'); } else { localStorage.setItem(AN_KEY,'1'); localStorage.setItem('umami.disabled','1'); } }catch(e){} $('an-note').textContent=ao.checked?'Thank you. Your visits are counted anonymously.':'Your visits on this device are no longer counted.'; };
   $('reset').onclick=()=>{
     if(!resetArmed){ resetArmed=true; $('reset').textContent='Tap again to delete all progress'; $('reset-note').textContent='This cannot be undone.'; return; }
-    resetArmed=false; S={studied:{}, checks:{}, enc:{}, tags:{}, oral:[]}; save(); $('reset').textContent='Reset my progress'; $('reset-note').textContent='Progress deleted.';
+    resetArmed=false; S=emptyS(); save(); $('reset').textContent='Reset my progress'; $('reset-note').textContent='Progress deleted.';
   };
+}
+/* ================= ACCOUNTS (Supabase) ================= */
+const AC = C.meta.auth || {};
+const AUTH_ON = !!(window.supabase && window.supabase.createClient && AC.supabaseUrl && AC.supabaseAnonKey);
+let sb=null, USER=null, PROFILE=null, PLAN='free', RECOVERY=false, AUTH_NOTE='', acctTab='signin', delArmed=false, pushTimer=null;
+const SYNC={state:'off', at:null, err:''};
+const ROLES=[['cadet','Cadet or trainee'],['oow','Officer of the watch'],['senior','Chief mate or Master'],['trainer','Trainer or examiner'],['other','Other']];
+function emptyS(){ return {studied:{}, checks:{}, enc:{}, tags:{}, oral:[]}; }
+function isPremium(){ return PLAN==='premium'; }
+function authErr(e){
+  const m=String((e&&(e.message||e.error_description))||e||'');
+  if(/Invalid login credentials/i.test(m)) return 'That email and password do not match an account.';
+  if(/Email not confirmed/i.test(m)) return 'Please confirm your email first: open the link we sent you.';
+  if(/already (been )?registered|User already/i.test(m)) return 'An account with this email already exists. Sign in, or reset your password.';
+  if(/Password should|at least \d+ characters|weak/i.test(m)) return 'Choose a stronger password of at least 8 characters.';
+  if(/rate limit|too many|security purposes/i.test(m)) return 'Too many attempts. Please wait a few minutes and try again.';
+  if(/fetch|network|Failed to/i.test(m)) return 'Could not reach the account service. Check your connection and try again.';
+  return m||'Something went wrong. Please try again.';
+}
+function mergeProgress(a,b){
+  a=Object.assign(emptyS(),a||{}); b=Object.assign(emptyS(),b||{});
+  const out={studied:{...b.studied,...a.studied}, checks:{...b.checks,...a.checks}, enc:{}, tags:{}, oral:[]};
+  new Set([...Object.keys(a.enc),...Object.keys(b.enc)]).forEach(id=>{ const x=a.enc[id], y=b.enc[id]; out.enc[id]=x&&y?{ok:!!(x.ok||y.ok), tries:Math.max(x.tries||0,y.tries||0), last:x.last}:(x||y); });
+  new Set([...Object.keys(a.tags),...Object.keys(b.tags)]).forEach(t=>{ const x=a.tags[t], y=b.tags[t]; out.tags[t]=!x?y:!y?x:(x.n>=y.n?x:y); });
+  const seen=new Set();
+  [...a.oral,...b.oral].sort((p,q)=>(q.ts||0)-(p.ts||0)).forEach(o=>{ const k=(o.ts||'')+'|'+o.date+'|'+o.pct; if(!seen.has(k)){ seen.add(k); out.oral.push(o); } });
+  out.oral=out.oral.slice(0,20);
+  return out;
+}
+function syncText(){
+  if(!USER) return '';
+  if(SYNC.state==='saving'||SYNC.state==='pending') return 'Saving to your account…';
+  if(SYNC.state==='error') return 'Not synced: '+authErr(SYNC.err)+' Your progress is still saved on this device.';
+  if(SYNC.at) return 'Synced at '+SYNC.at.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})+'.';
+  return 'Synced.';
+}
+function refreshSync(){ const el=$('sync-status'); if(el) el.textContent=syncText(); }
+function schedulePush(){ if(!USER||!sb) return; clearTimeout(pushTimer); SYNC.state='pending'; refreshSync(); pushTimer=setTimeout(pushNow,1500); }
+async function pushNow(){
+  if(!USER||!sb) return;
+  SYNC.state='saving'; refreshSync();
+  try{
+    const {error}=await sb.from('progress').upsert({user_id:USER.id, data:S, updated_at:new Date().toISOString()});
+    if(error) throw error; SYNC.state='saved'; SYNC.at=new Date(); SYNC.err='';
+  }catch(e){ SYNC.state='error'; SYNC.err=e; }
+  refreshSync();
+}
+async function pullAndMerge(){
+  const {data,error}=await sb.from('progress').select('data').eq('user_id',USER.id).maybeSingle();
+  if(error) throw error;
+  if(data&&data.data) S=mergeProgress(S,data.data);
+  saveLocal(); await pushNow();
+}
+function cleanAuthUrl(){
+  const dirtyQ=/[?&](code|error|error_description)=/.test(location.search), dirtyH=/(access_token|refresh_token|error_description|type=recovery)/.test(location.hash);
+  if(dirtyQ||dirtyH){ try{ history.replaceState(null,'',location.pathname+(dirtyH?'#'+hashOf(view):location.hash)); }catch(e){} }
+}
+function afterAuthFlag(set){ try{ if(set) sessionStorage.setItem('mwm-after-auth','account'); else { const v=sessionStorage.getItem('mwm-after-auth'); sessionStorage.removeItem('mwm-after-auth'); return v; } }catch(e){} return null; }
+async function onSignedIn(user){
+  USER=user; acctTab='signin'; SYNC.state='saving'; renderAcctBtn();
+  trackEvent('signed-in',{method:(user.app_metadata&&user.app_metadata.provider)||'email'});
+  try{
+    const [p,e]=await Promise.all([
+      sb.from('profiles').select('display_name,role').eq('id',user.id).maybeSingle(),
+      sb.from('entitlements').select('plan').eq('user_id',user.id).maybeSingle()]);
+    PROFILE=(p&&p.data)||{display_name:'',role:null}; PLAN=(e&&e.data&&e.data.plan)||'free';
+    Promise.resolve(sb.rpc('touch_last_seen')).catch(()=>{});
+    await pullAndMerge();
+  }catch(err){ SYNC.state='error'; SYNC.err=err; }
+  const back=afterAuthFlag(false);
+  if(back==='account'||view.name==='account'){ view={name:'account'}; }
+  cleanAuthUrl(); render();
+}
+function displayName(){ return (PROFILE&&PROFILE.display_name)||(USER&&USER.user_metadata&&(USER.user_metadata.full_name||USER.user_metadata.display_name))||(USER?String(USER.email).split('@')[0]:''); }
+function renderAcctBtn(){
+  const b=$('acct-btn'); if(!b) return;
+  b.hidden=!AUTH_ON; if(!AUTH_ON) return;
+  if(USER){ const n=displayName(); b.innerHTML=`<span class="av">${esc((n[0]||'?').toUpperCase())}</span><span class="nm">${esc(n.split(' ')[0])}</span>`; b.setAttribute('aria-label','Your account'); }
+  else { b.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span class="nm">Sign in</span>`; b.setAttribute('aria-label','Sign in or create an account'); }
+  if(view.name==='account') b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+}
+if(AUTH_ON){
+  try{
+    sb=window.supabase.createClient(AC.supabaseUrl, AC.supabaseAnonKey, {auth:{persistSession:true, autoRefreshToken:true, detectSessionInUrl:true, storageKey:'mwm-orals-auth'}});
+    const qs=new URLSearchParams(location.search), hs=new URLSearchParams((location.hash||'').replace(/^#/,''));
+    const err=qs.get('error_description')||hs.get('error_description');
+    if(err){ AUTH_NOTE=err.replace(/\+/g,' '); view={name:'account'}; cleanAuthUrl(); }
+    sb.auth.onAuthStateChange((event, session)=>{
+      setTimeout(()=>{
+        if(event==='PASSWORD_RECOVERY'){ RECOVERY=true; if(session&&session.user) USER=session.user; view={name:'account'}; cleanAuthUrl(); render(); return; }
+        if(session&&session.user&&(!USER||USER.id!==session.user.id)){ onSignedIn(session.user); return; }
+        if(!session&&USER){ USER=null; PROFILE=null; PLAN='free'; SYNC.state='off'; render(); return; }
+        if(session&&session.user) USER=session.user;
+      },0);
+    });
+  }catch(e){ sb=null; }
+}
+const GLOGO='<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+function msgHTML(kind,text){ return `<div class="msg ${kind}" role="${kind==='bad'?'alert':'status'}">${esc(text)}</div>`; }
+function pwField(id,label,auto,hint){ return `<div class="field"><label for="${id}">${label}</label><div class="pw"><input id="${id}" type="password" autocomplete="${auto}" required minlength="8"><button type="button" data-showpw="${id}">Show</button></div>${hint?`<span class="hint">${hint}</span>`:''}</div>`; }
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-showpw]'); if(b){ const i=$(b.dataset.showpw); const show=i.type==='password'; i.type=show?'text':'password'; b.textContent=show?'Hide':'Show'; } });
+function busy(form,on,label){ const b=form.querySelector('button[type="submit"]'); if(!b) return; if(on){ b.dataset.l=b.textContent; b.textContent=label||'Please wait…'; b.disabled=true; } else { b.textContent=b.dataset.l||b.textContent; b.disabled=false; } }
+function vAccount(m){
+  if(!AUTH_ON){ m.innerHTML=`<div class="auth"><h1 style="font-size:36px">Accounts</h1><p class="lead muted">Accounts are not switched on here yet. Everything works without one, and your progress is saved on this device.</p></div>`; return; }
+  const ac=AC.google!==false, ae=AC.email!==false;
+  if(RECOVERY){
+    m.innerHTML=`<div class="auth"><span class="eyebrow">Account</span><h1 style="font-size:36px">Set a new password</h1>
+      <form class="panel stack" id="f-new" novalidate>${pwField('np','New password','new-password','At least 8 characters.')}<div id="acct-msg"></div><button class="btn primary" type="submit">Save new password</button></form></div>`;
+    $('f-new').onsubmit=async ev=>{ ev.preventDefault(); const f=ev.target, pw=$('np').value;
+      if(pw.length<8){ $('acct-msg').innerHTML=msgHTML('bad','Choose a password of at least 8 characters.'); return; }
+      busy(f,true); const {error}=await sb.auth.updateUser({password:pw}); busy(f,false);
+      if(error){ $('acct-msg').innerHTML=msgHTML('bad',authErr(error)); return; }
+      RECOVERY=false; AUTH_NOTE='Your password has been changed.'; vAccount(m); };
+    return;
+  }
+  if(USER){
+    const prov=(USER.app_metadata&&USER.app_metadata.provider)==='google'?'Google':'email and password';
+    m.innerHTML=`<div class="auth"><span class="eyebrow">Your account</span><h1 style="font-size:36px">${esc(displayName())}</h1>
+      ${AUTH_NOTE?msgHTML('ok',AUTH_NOTE):''}
+      <section class="panel stack"><dl class="kv"><dt>Email</dt><dd>${esc(USER.email||'')}</dd><dt>Signed in with</dt><dd>${prov}</dd><dt>Plan</dt><dd>${isPremium()?'Premium':'Free'}</dd></dl>
+        <p class="small" id="sync-status" aria-live="polite">${esc(syncText())}</p>
+        <div class="row"><button class="btn" type="button" id="sync-now">Sync now</button><button class="btn" type="button" id="sign-out">Sign out</button></div></section>
+      <form class="panel stack" id="f-prof"><h3 style="font-size:22px">Your details</h3>
+        <div class="field"><label for="pn">Name</label><input id="pn" type="text" maxlength="80" autocomplete="name" value="${esc((PROFILE&&PROFILE.display_name)||'')}"></div>
+        <div class="field"><label for="pr">I am</label><select id="pr"><option value="">Prefer not to say</option>${ROLES.map(([k,l])=>`<option value="${k}" ${PROFILE&&PROFILE.role===k?'selected':''}>${l}</option>`).join('')}</select></div>
+        <div id="prof-msg"></div><button class="btn" type="submit">Save details</button></form>
+      <section class="panel stack"><h3 style="font-size:22px">Delete your account</h3>
+        <p class="small">Deletes your account, your details and the progress synced to it. Progress saved in this browser stays until you reset it on the About page.</p>
+        <div class="row"><button class="btn danger" type="button" id="del">Delete my account</button></div><div id="del-msg"></div></section></div>`;
+    AUTH_NOTE='';
+    $('sync-now').onclick=()=>pushNow();
+    $('sign-out').onclick=async()=>{ await sb.auth.signOut(); acctTab='signin'; USER=null; PROFILE=null; PLAN='free'; SYNC.state='off'; AUTH_NOTE='You are signed out. Your progress is still saved on this device.'; render(); };
+    $('f-prof').onsubmit=async ev=>{ ev.preventDefault(); const f=ev.target; busy(f,true,'Saving…');
+      const upd={display_name:$('pn').value.trim().slice(0,80)||null, role:$('pr').value||null};
+      const {error}=await sb.from('profiles').update(upd).eq('id',USER.id); busy(f,false);
+      if(error){ $('prof-msg').innerHTML=msgHTML('bad',authErr(error)); return; }
+      PROFILE=Object.assign(PROFILE||{},upd); renderAcctBtn(); $('prof-msg').innerHTML=msgHTML('ok','Saved.'); };
+    $('del').onclick=async()=>{
+      if(!delArmed){ delArmed=true; $('del').textContent='Yes, delete it permanently'; $('del').classList.add('danger-fill'); $('del-msg').innerHTML=msgHTML('bad','This cannot be undone. Tap again to confirm.'); return; }
+      delArmed=false; $('del').disabled=true; $('del').textContent='Deleting…';
+      const {error}=await sb.rpc('delete_my_account');
+      if(error){ $('del').disabled=false; $('del').textContent='Delete my account'; $('del').classList.remove('danger-fill'); $('del-msg').innerHTML=msgHTML('bad',authErr(error)); return; }
+      try{ await sb.auth.signOut(); }catch(e){}
+      USER=null; PROFILE=null; PLAN='free'; SYNC.state='off'; AUTH_NOTE='Your account and the progress synced to it have been deleted.'; render(); };
+    return;
+  }
+  const tabs=`<div class="authtabs" role="tablist"><button type="button" role="tab" data-atab="signin" aria-selected="${acctTab==='signin'}">Sign in</button><button type="button" role="tab" data-atab="signup" aria-selected="${acctTab==='signup'}">Create account</button></div>`;
+  const google=ac?`<button class="gbtn" type="button" id="g-btn">${GLOGO}<span>${acctTab==='signup'?'Sign up with Google':'Sign in with Google'}</span></button>${acctTab==='signup'?`<p class="small muted" style="margin-top:-6px">By continuing with Google you agree to the <a href="${esc(SITE)}terms.html" target="_blank" rel="noopener" style="color:var(--accent)">terms of use</a> and <a href="${esc(SITE)}privacy.html" target="_blank" rel="noopener" style="color:var(--accent)">privacy policy</a>.</p>`:''}${ae?'<div class="or">or with email</div>':''}`:'';
+  let form='';
+  if(acctTab==='reset') form=`<form class="stack" id="f-reset" novalidate style="gap:14px"><p class="small">Enter your email and we will send a link to set a new password.</p>
+      <div class="field"><label for="re">Email</label><input id="re" type="email" autocomplete="email" required></div><div id="acct-msg"></div>
+      <button class="btn primary" type="submit">Send reset link</button><button class="linkbtn" type="button" data-atab="signin">Back to sign in</button></form>`;
+  else if(acctTab==='signup') form=ae?`<form class="stack" id="f-up" novalidate style="gap:14px">
+      <div class="field"><label for="un">Name</label><input id="un" type="text" maxlength="80" autocomplete="name"></div>
+      <div class="field"><label for="ue">Email</label><input id="ue" type="email" autocomplete="email" required></div>
+      ${pwField('up','Password','new-password','At least 8 characters.')}
+      <div class="field"><label for="ur">I am (optional)</label><select id="ur"><option value="">Prefer not to say</option>${ROLES.map(([k,l])=>`<option value="${k}">${l}</option>`).join('')}</select></div>
+      <label class="check"><input type="checkbox" id="ut"><span>I agree to the <a href="${esc(SITE)}terms.html" target="_blank" rel="noopener" style="color:var(--accent)">terms of use</a> and the <a href="${esc(SITE)}privacy.html" target="_blank" rel="noopener" style="color:var(--accent)">privacy policy</a>.</span></label>
+      <div id="acct-msg"></div><button class="btn primary" type="submit">Create account</button></form>`:'';
+  else form=ae?`<form class="stack" id="f-in" novalidate style="gap:14px">
+      <div class="field"><label for="ie">Email</label><input id="ie" type="email" autocomplete="email" required></div>
+      ${pwField('ip','Password','current-password')}
+      <div id="acct-msg"></div><button class="btn primary" type="submit">Sign in</button><button class="linkbtn" type="button" data-atab="reset">Forgot your password?</button></form>`:'';
+  m.innerHTML=`<div class="auth"><span class="eyebrow">Account</span><h1 style="font-size:36px">${acctTab==='signup'?'Create a free account':acctTab==='reset'?'Reset your password':'Sign in'}</h1>
+    <p class="muted">An account is optional. It saves your progress so it follows you to another phone or laptop.</p>
+    ${AUTH_NOTE?msgHTML(/deleted|signed out|changed/i.test(AUTH_NOTE)?'ok':'bad',AUTH_NOTE):''}
+    ${acctTab==='reset'?'':tabs}<div class="panel stack" style="gap:14px">${acctTab==='reset'?'':google}${form}</div></div>`;
+  AUTH_NOTE='';
+  m.querySelectorAll('[data-atab]').forEach(b=>b.onclick=()=>{ acctTab=b.dataset.atab; vAccount(m); });
+  const g=$('g-btn'); if(g) g.onclick=async()=>{
+    afterAuthFlag(true); g.disabled=true; trackEvent('google-sign-in-click',{tab:acctTab});
+    const {error}=await sb.auth.signInWithOAuth({provider:'google', options:{redirectTo:SITE}});
+    if(error){ g.disabled=false; const box=m.querySelector('.panel'); box.insertAdjacentHTML('afterbegin',msgHTML('bad',authErr(error))); } };
+  const fin=$('f-in'); if(fin) fin.onsubmit=async ev=>{ ev.preventDefault(); const email=$('ie').value.trim(), pw=$('ip').value;
+    if(!email||!pw){ $('acct-msg').innerHTML=msgHTML('bad','Enter your email and password.'); return; }
+    busy(fin,true,'Signing in…'); const {error}=await sb.auth.signInWithPassword({email,password:pw}); busy(fin,false);
+    if(error) $('acct-msg').innerHTML=msgHTML('bad',authErr(error)); else afterAuthFlag(true); };
+  const fup=$('f-up'); if(fup) fup.onsubmit=async ev=>{ ev.preventDefault();
+    const name=$('un').value.trim(), email=$('ue').value.trim(), pw=$('up').value, role=$('ur').value;
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ $('acct-msg').innerHTML=msgHTML('bad','Enter a valid email address.'); return; }
+    if(pw.length<8){ $('acct-msg').innerHTML=msgHTML('bad','Choose a password of at least 8 characters.'); return; }
+    if(!$('ut').checked){ $('acct-msg').innerHTML=msgHTML('bad','Please tick the box to accept the terms of use and privacy policy.'); return; }
+    busy(fup,true,'Creating account…');
+    const {data,error}=await sb.auth.signUp({email,password:pw,options:{emailRedirectTo:SITE,data:{display_name:name,role}}});
+    busy(fup,false);
+    if(error){ $('acct-msg').innerHTML=msgHTML('bad',authErr(error)); return; }
+    if(data&&data.user&&Array.isArray(data.user.identities)&&data.user.identities.length===0){ $('acct-msg').innerHTML=msgHTML('bad','An account with this email already exists. Sign in, or reset your password.'); return; }
+    trackEvent('sign-up',{method:'email'});
+    if(data&&data.session){ afterAuthFlag(true); return; }
+    $('acct-msg').innerHTML=msgHTML('ok',`Almost done. We sent a confirmation link to ${email}. Open it to finish creating your account. Check your spam folder if it does not arrive in a few minutes.`);
+    fup.querySelector('button[type="submit"]').disabled=true; };
+  const frs=$('f-reset'); if(frs) frs.onsubmit=async ev=>{ ev.preventDefault(); const email=$('re').value.trim();
+    if(!email){ $('acct-msg').innerHTML=msgHTML('bad','Enter your email address.'); return; }
+    busy(frs,true,'Sending…'); const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:SITE}); busy(frs,false);
+    $('acct-msg').innerHTML=error?msgHTML('bad',authErr(error)):msgHTML('ok','If an account exists for that email, a reset link is on its way.'); };
 }
 window.MWM_RENDER={picSVG,radarSVG,visualSVG,PBY,EBY};
 renderFoot();
 render();
+trackView();
 }
 })();
 </script>

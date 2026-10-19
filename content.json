@@ -3,7 +3,7 @@
   "app": "MWM Orals",
   "brand": "Maritime With Maro",
   "title": "COLREGs & Buoyage for the OOW oral",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "updated": "2026-10-19",
   "assetsNote": "Asset paths are relative to the folder that holds content.json.",
   "disclaimer": "Independent study aid by Maritime With Maro. Not affiliated with or endorsed by the Maritime and Coastguard Agency (MCA) or IMO. Notes are plain-English summaries; always refer to the official COLREGs text (e.g. MSN 1781 in the UK) and the IALA Maritime Buoyage System.",
@@ -25,6 +25,18 @@
    "whatsapp": "",
    "youtube": "https://www.youtube.com/@MaritimeWithMaro",
    "author": "Maro, a UK-certificated Master Mariner (Master Unlimited CoC)"
+  },
+  "auth": {
+   "supabaseUrl": "https://ekhichxedynedadltwou.supabase.co",
+   "supabaseAnonKey": "sb_publishable_tCaNZUC_ZUEIkQa_qAQqLg_8cmmhaQ-",
+   "google": true,
+   "email": true
+  },
+  "analytics": {
+   "provider": "umami",
+   "scriptUrl": "https://cloud.umami.is/script.js",
+   "websiteId": "",
+   "domains": "omugbe-maro.github.io"
   },
   "sound": {
    "shortMs": 1000,
