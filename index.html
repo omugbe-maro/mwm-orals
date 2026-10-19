@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Free study aid for the MCA OOW oral: plain-English COLREGs and IALA buoyage notes, a radar and night-lights encounter trainer, and a mock oral with examiner follow-ups.">
+<meta name="theme-color" content="#16384D">
+<link rel="canonical" href="https://omugbe-maro.github.io/mwm-orals/">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="brand/icon-192.png">
+<link rel="apple-touch-icon" href="brand/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Maritime With Maro">
+<meta property="og:title" content="MWM Orals: COLREGs & Buoyage for the OOW oral">
+<meta property="og:description" content="Free study aid for the MCA OOW oral: plain-English COLREGs and IALA buoyage notes, a radar and night-lights encounter trainer, and a mock oral with examiner follow-ups.">
+<meta property="og:url" content="https://omugbe-maro.github.io/mwm-orals/">
+<meta property="og:image" content="https://omugbe-maro.github.io/mwm-orals/brand/og-image-1200x630.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="MWM Orals by Maritime With Maro: COLREGs and IALA buoyage practice for the MCA OOW oral exam">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MWM Orals: COLREGs & Buoyage for the OOW oral">
+<meta name="twitter:description" content="Free study aid for the MCA OOW oral: plain-English COLREGs and IALA buoyage notes, a radar and night-lights encounter trainer, and a mock oral with examiner follow-ups.">
+<meta name="twitter:image" content="https://omugbe-maro.github.io/mwm-orals/brand/og-image-1200x630.jpg">
+<script>
+window.MWM_PWA = true;
+if ('serviceWorker' in navigator) { window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+</script>
+<title>MWM Orals</title>
+<style>
+@font-face{font-family:"Barlow Condensed";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"Barlow Condensed";font-weight:700;font-style:normal;font-display:swap;src:url(fonts/barlow-condensed-latin-700-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:400;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-sans-latin-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:500;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-sans-latin-500-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans";font-weight:600;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-sans-latin-600-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Mono";font-weight:500;font-style:normal;font-display:swap;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2) format("woff2")}
+/* Layout: app shell. Top bar with brand; tab nav on the right at desktop, fixed bottom bar on phones.
+   Palette: chart-paper white, ship's-ink navy, SOLAS orange accent. Radar and night scenes are fixed instrument colours. */
+:root{
+  --bg:#EEF2F4; --surface:#FFFFFF; --surface-2:#E3EAEE; --ink:#0F2230; --muted:#526572; --line:#C9D5DC;
+  --navy:#16384D; --navy-ink:#F2F6F8; --accent:#C8460F; --accent-ink:#FFFFFF; --accent-soft:#F8E3D8;
+  --ok:#11775A; --ok-soft:#DDF1EA; --bad:#B9352A; --bad-soft:#F8E1DE; --warn:#9A6A0D; --warn-soft:#F6EBD3;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --nav-h:64px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0A131A; --surface:#101C24; --surface-2:#16252F; --ink:#DCE6EB; --muted:#8FA3AF; --line:#24363F;
+    --navy:#0E2736; --navy-ink:#E6EEF2; --accent:#FF7C3F; --accent-ink:#1C0B03; --accent-soft:#3A2116;
+    --ok:#4FCB9C; --ok-soft:#12302A; --bad:#FF7468; --bad-soft:#3A1A18; --warn:#E9B65A; --warn-soft:#352915; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0A131A; --surface:#101C24; --surface-2:#16252F; --ink:#DCE6EB; --muted:#8FA3AF; --line:#24363F;
+  --navy:#0E2736; --navy-ink:#E6EEF2; --accent:#FF7C3F; --accent-ink:#1C0B03; --accent-soft:#3A2116;
+  --ok:#4FCB9C; --ok-soft:#12302A; --bad:#FF7468; --bad-soft:#3A1A18; --warn:#E9B65A; --warn-soft:#352915; color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);font-weight:700;letter-spacing:.005em;line-height:1.08;text-wrap:balance;margin:0}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.mono{font-family:var(--mono)}
+
+/* shell */
+.topbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--navy);color:var(--navy-ink)}
+.topbar .in{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px;background:none;border:0;padding:0;color:inherit;text-align:left}
+.brand svg{flex:none}
+.brand .t1{display:block;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.8;font-weight:600}
+.brand .t2{display:block;font-family:var(--display);font-weight:700;font-size:24px;line-height:1}
+.tabs{margin-left:auto;display:flex;gap:4px}
+.tabs button{background:none;border:0;color:var(--navy-ink);opacity:.78;padding:10px 14px;border-radius:6px;font-weight:500;display:flex;align-items:center;gap:8px}
+.tabs button[aria-current="page"]{opacity:1;background:rgba(255,255,255,.12)}
+.tabs button:hover{opacity:1}
+.tabs svg{width:18px;height:18px}
+.botnav{display:none}
+@media (max-width:860px){
+  .tabs{display:none}
+  .botnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--surface);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+  .botnav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 8px;font-size:12px;font-weight:500;color:var(--muted);min-height:var(--nav-h)}
+  .botnav button svg{width:22px;height:22px}
+  .botnav button[aria-current="page"]{color:var(--accent)}
+  main{padding-bottom:calc(var(--nav-h) + 24px + env(safe-area-inset-bottom,0px))!important}
+}
+main{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 40px;display:flex;flex-direction:column;gap:22px}
+.crumb{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.back{background:none;border:0;padding:6px 0;color:var(--muted);font-weight:500;display:inline-flex;align-items:center;gap:6px}
+.back:hover{color:var(--ink)}
+
+/* generic */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.btn{border-radius:7px;border:1px solid var(--line);background:var(--surface);padding:10px 16px;font-weight:600;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn[disabled]{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;background:var(--surface-2);color:var(--muted);white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.bad{background:var(--bad-soft);color:var(--bad)} .pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.acc{background:var(--accent-soft);color:var(--accent)}
+.lead{font-size:18px;max-width:64ch}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+ul.points{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:72ch}
+.disclaimer{font-size:13px;color:var(--muted);max-width:80ch;border-top:1px solid var(--line);padding-top:14px}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.hero h1{font-size:46px}
+@media (max-width:560px){.hero h1{font-size:36px}}
+.hero .intro{display:flex;flex-direction:column;gap:12px;justify-content:center}
+.meters{display:flex;flex-direction:column;gap:14px}
+.meter .lab{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:500}
+.meter .lab b{font-family:var(--mono);font-weight:500;font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:860px){.modes{grid-template-columns:minmax(0,1fr)}}
+.mode{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;color:inherit}
+.mode:hover{border-color:var(--accent)}
+.mode .ic{width:52px;height:52px;border-radius:9px;background:var(--navy);display:grid;place-items:center}
+.mode h2{font-size:26px}
+.mode p{color:var(--muted);font-size:15px;margin-top:4px}
+.mode .go{margin-top:10px;font-weight:600;color:var(--accent);font-size:15px}
+.weak{display:flex;flex-wrap:wrap;gap:8px}
+.weak button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:500;display:inline-flex;gap:8px;align-items:center}
+.weak button b{font-family:var(--mono);font-weight:500;color:var(--bad)}
+
+/* rules list */
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 14px;font-weight:500;min-height:36px}
+.filters button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.group{display:flex;flex-direction:column;gap:8px}
+.group h2{font-size:22px}
+.group .gsub{font-size:13px;color:var(--muted)}
+.tlist{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.trow{display:grid;grid-template-columns:76px minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 14px;background:none;border:0;border-top:1px solid var(--line);text-align:left;width:100%}
+.trow:first-child{border-top:0}
+.trow:hover{background:var(--surface-2)}
+.trow .n{font-family:var(--display);font-weight:700;font-size:20px;color:var(--accent);font-variant-numeric:tabular-nums}
+.trow .tt{font-weight:500}
+.trow .st{display:flex;gap:6px}
+@media (max-width:560px){.trow{grid-template-columns:62px minmax(0,1fr)}.trow .st{grid-column:2}}
+
+/* topic */
+.topic-head{display:flex;flex-direction:column;gap:6px}
+.topic-head .num{font-family:var(--display);font-weight:700;font-size:20px;color:var(--accent)}
+.topic-head h1{font-size:40px}
+@media (max-width:560px){.topic-head h1{font-size:32px}}
+.cols{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:900px){.cols{grid-template-columns:minmax(0,1fr)}}
+.stack{display:flex;flex-direction:column;gap:18px;min-width:0}
+.sec h3{font-size:22px;margin-bottom:10px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.thumb{border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--surface);padding:0;text-align:left;display:flex;flex-direction:column}
+.thumb:hover{border-color:var(--accent)}
+.thumb .pic{aspect-ratio:16/9;max-width:100%;background:#04070D}
+.thumb .pic svg{display:block;width:100%;height:100%}
+.thumb span{font-size:13px;padding:6px 9px;font-weight:500}
+.qa{border-top:1px solid var(--line);padding-block:12px;display:flex;flex-direction:column;gap:8px}
+.qa:first-of-type{border-top:0;padding-top:0}
+.qa .q{font-weight:500}
+.qa .a{background:var(--surface-2);border-radius:8px;padding:10px 12px}
+.reveal{align-self:flex-start;background:none;border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-size:14px;font-weight:600}
+.reveal:hover{border-color:var(--accent)}
+.mcq{display:flex;flex-direction:column;gap:8px}
+.mcq button.opt{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:11px 14px;font-weight:500;display:flex;gap:10px;align-items:flex-start}
+.mcq button.opt:hover:not([disabled]){border-color:var(--accent)}
+.mcq button.opt .k{font-family:var(--mono);font-size:13px;color:var(--muted);padding-top:2px}
+.mcq button.opt.right{background:var(--ok-soft);border-color:var(--ok)}
+.mcq button.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.mcq button.opt[disabled]{cursor:default}
+.fb{border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.fb.ok{background:var(--ok-soft)} .fb.bad{background:var(--bad-soft)}
+.fb b{font-weight:600}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* pictures */
+.stage{position:relative;width:100%;max-width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;background:#04070D}
+.stage svg{display:block;width:100%;height:100%}
+.ans{display:flex;flex-direction:column;gap:8px;border-top:2px solid var(--accent);padding-top:12px}
+.ans h3{font-size:26px}
+.ans .char{font-family:var(--mono);color:var(--accent)}
+dl.facts{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:5px 14px;margin:0}
+dl.facts dt{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+dl.facts dd{margin:0}
+.rhythm{overflow-x:auto} .rhythm svg{display:block;width:100%;min-width:300px;height:auto}
+.rhythm .lbl{fill:var(--muted);font-family:var(--mono);font-size:11px} .rhythm .ax{stroke:var(--line)} .rhythm .bar-W{fill:#FFF3D1;stroke:var(--muted)}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(5,12,18,.6);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;
+  padding-top:calc(24px + env(safe-area-inset-top,0px));padding-bottom:calc(24px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.modal .box{background:var(--surface);border-radius:12px;max-width:820px;width:100%;padding:18px;display:flex;flex-direction:column;gap:14px}
+.modal .mh{display:flex;justify-content:space-between;align-items:center;gap:10px}
+
+/* encounters */
+.elist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.ecard{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;color:inherit}
+.ecard:hover{border-color:var(--accent)}
+.ecard .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ecard .id{font-family:var(--display);font-weight:700;font-size:22px;color:var(--accent)}
+.ecard .tl{font-weight:600}
+.scope-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:14px;align-items:start}
+.scope-wrap.single{grid-template-columns:minmax(0,1fr)}
+.scope-wrap.single .instr{max-width:480px;width:100%}
+@media (max-width:900px){.scope-wrap{grid-template-columns:minmax(0,1fr)}}
+.instr{background:#05100D;border-radius:10px;overflow:hidden;border:1px solid #17352B}
+.instr svg{display:block;width:100%;height:auto}
+.instr .cap{display:flex;justify-content:space-between;gap:10px;padding:8px 12px;font-family:var(--mono);font-size:12px;color:#7FD9AE;background:#03130D;flex-wrap:wrap}
+.night{background:#02050A;border-color:#1B2635}
+.night .cap{color:#AFC3DA;background:#060B14}
+.arpa{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;margin:0;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+@media (min-width:900px){.arpa{grid-template-columns:repeat(9,minmax(0,1fr))}}
+.arpa div{background:var(--surface);padding:8px 10px;min-width:0}
+.arpa dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.arpa dd{margin:0;font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.step{display:flex;flex-direction:column;gap:10px}
+.step h3{font-size:22px}
+.vis-badge{font-family:var(--mono);font-size:12px}
+.playbtn{align-self:flex-start}
+
+/* oral */
+.oral-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.prog{flex:1 1 200px;min-width:160px}
+.qcard{display:flex;flex-direction:column;gap:14px}
+.qcard .qtext{font-size:21px;font-weight:600;line-height:1.35;max-width:62ch;text-wrap:balance}
+.qcard .ctx{font-weight:500;color:var(--muted)}
+.marks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.marks button{border:1px solid var(--line);border-radius:8px;background:var(--surface);padding:11px 8px;font-weight:600;min-height:48px}
+.marks .m-got:hover{border-color:var(--ok);background:var(--ok-soft)}
+.marks .m-partly:hover{border-color:var(--warn);background:var(--warn-soft)}
+.marks .m-missed:hover{border-color:var(--bad);background:var(--bad-soft)}
+.follow-tag{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent)}
+.score{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.score .big{font-family:var(--display);font-size:72px;font-weight:700;line-height:1;font-variant-numeric:tabular-nums}
+.tagbars{display:flex;flex-direction:column;gap:10px}
+.tagbars .lab{display:flex;justify-content:space-between;font-size:14px}
+.tagbars .bar i.ok{background:var(--ok)} .tagbars .bar i.warn{background:var(--warn)} .tagbars .bar i.bad{background:var(--bad)}
+.hist{display:flex;flex-direction:column}
+.hist .hr{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
+.hist .hr:first-child{border-top:0}
+.review{display:flex;flex-direction:column;gap:8px}
+.review .back{text-align:left;padding:4px 0}
+.review .it{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;padding:10px 12px;border-radius:8px;background:var(--surface-2)}
+.empty{color:var(--muted);font-size:15px}
+.about-btn{background:none;border:0;color:var(--navy-ink);opacity:.85;padding:10px 12px;border-radius:6px;font-weight:500;display:flex;align-items:center;gap:8px;margin-left:4px}
+.about-btn svg{width:20px;height:20px}
+.about-btn[aria-current="page"],.about-btn:hover{opacity:1;background:rgba(255,255,255,.12)}
+@media (max-width:860px){.about-btn{margin-left:auto}.about-btn span{display:none}}
+.foot{max-width:1120px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 32px;display:flex;flex-direction:column;gap:8px;font-size:13px;color:var(--muted)}
+.foot .links{display:flex;flex-wrap:wrap;gap:6px 16px}
+.foot a{color:var(--muted)} .foot a:hover{color:var(--ink)}
+@media (max-width:860px){.foot{padding-bottom:calc(var(--nav-h) + 28px + env(safe-area-inset-bottom,0px))} main{padding-bottom:24px!important}}
+.report{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;font-size:14px;color:var(--muted)}
+.report a,.linkbtn{color:var(--accent);font-weight:600;text-decoration:none;background:none;border:0;padding:4px 0;font-size:14px}
+.report a:hover,.linkbtn:hover{text-decoration:underline}
+.cta{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;background:var(--navy);color:var(--navy-ink);border-radius:10px;padding:18px}
+.cta h3{font-size:24px} .cta p{opacity:.88;font-size:15px;margin-top:4px}
+.cta .btn{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);text-decoration:none}
+@media (max-width:560px){.cta{grid-template-columns:minmax(0,1fr)}}
+a.btn{text-decoration:none;color:inherit}
+.about h2{font-size:26px;margin-bottom:8px}
+.about a:not(.btn),.panel a:not(.btn){color:var(--accent)}
+.about .sec{display:flex;flex-direction:column;gap:8px}
+.copied{font-size:13px;color:var(--ok);font-weight:600}
+.urlbox{font-family:var(--mono);font-size:13px;width:100%;max-width:440px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="in">
+  <button class="brand" id="brand" type="button" aria-label="Home">
+    <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><rect width="36" height="36" rx="7" fill="#C8460F"/><path d="M18 6 L27 18 L18 30 L9 18 Z" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="18" cy="18" r="3.2" fill="#fff"/></svg>
+    <span><span class="t1">Maritime With Maro</span><span class="t2">OOW Orals</span></span>
+  </button>
+  <nav class="tabs" id="tabs" aria-label="Sections"></nav>
+  <button class="about-btn" type="button" data-nav="about" id="about-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>About</span></button>
+</div></header>
+<main id="main" aria-live="polite"></main>
+<footer class="foot" id="foot"></footer>
+<nav class="botnav" id="botnav" aria-label="Sections"></nav>
+<div id="modal-root"></div>
+
+<script type="application/json" id="content"></script>
+<script>
+(function(){
+"use strict";
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); window.__mwmInstall=e; });
+const inline=document.getElementById('content').textContent.trim();
+if(inline && inline[0]==='{'){ start(JSON.parse(inline)); }
+else {
+  document.getElementById('main').innerHTML='<p class="empty">Loading the study notes…</p>';
+  fetch('content.json',{cache:'no-cache'}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }).then(start)
+    .catch(()=>{ document.getElementById('main').innerHTML='<p class="empty">The study notes could not be loaded. Check your connection and reload the page.</p>'; });
+}
+function start(C){
+const $ = id => document.getElementById(id);
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const pick = (a,n) => shuffle(a).slice(0,n);
+let UID = 0; const uid = () => 'u'+(++UID);
+
+const TOPICS = C.topics, TBY = Object.fromEntries(TOPICS.map(t=>[t.id,t]));
+const PICS = C.pictures, PBY = Object.fromEntries(PICS.map(p=>[p.id,p]));
+const ENC = C.encounters, EBY = Object.fromEntries(ENC.map(e=>[e.id,e]));
+const VERB = C.oral.verbal, SND = C.oral.sounds, SBY = Object.fromEntries(SND.map(s=>[s.id,s])), VBY = Object.fromEntries(VERB.map(v=>[v.id,v]));
+const TAGS = C.meta.tags;
+
+/* ---------------- progress store (this device only) ---------------- */
+const KEY = 'mwm-orals-v1';
+let S = {studied:{}, checks:{}, enc:{}, tags:{}, oral:[]};
+try { const raw = localStorage.getItem(KEY); if(raw){ S = Object.assign(S, JSON.parse(raw)); } } catch(e){}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function tagScore(tag, v){ const t = S.tags[tag] || (S.tags[tag] = {n:0, sum:0}); t.n++; t.sum += v; }
+
+/* ---------------- icons ---------------- */
+const ICON = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/></svg>',
+  rules:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/><path d="M9 8h6M9 12h6"/></svg>',
+  enc:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M12 12 18 6"/></svg>',
+  oral:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+};
+const NAV = [['home','Home'],['rules','Study'],['enc','Encounters'],['oral','Mock oral']];
+
+/* ---------------- router ---------------- */
+const CT = C.meta.contact || {};
+const SITE = CT.siteUrl || (location.origin + location.pathname);
+const WA = String(CT.whatsapp||'').replace(/[^0-9]/g,'');
+const hashOf = v => ({home:'', rules:'study', topic:v.param, enc:'encounters', encrun:v.param, oral:'oral', oralrun:'oral', oralres:'oral', about:'about'}[v.name] || '');
+function parseHash(){
+  const h=(location.hash||'').replace(/^#/,'');
+  if(h==='study') return {name:'rules'};
+  if(h==='encounters') return {name:'enc'};
+  if(h==='oral') return {name:'oral'};
+  if(h==='about') return {name:'about'};
+  if(TBY[h]) return {name:'topic',param:h};
+  if(EBY[h]) return {name:'encrun',param:h};
+  return {name:'home'};
+}
+let view = parseHash();
+function go(name, param){
+  view = {name, param};
+  const h = hashOf(view), cur = (location.hash||'').replace(/^#/,'');
+  if(h!==cur){ try{ history.pushState(null,'',h?'#'+h:location.pathname+location.search); }catch(e){} }
+  render(); window.scrollTo(0,0);
+}
+window.addEventListener('popstate',()=>{ const v=parseHash(); view = (session && v.name==='oral') ? {name:'oralrun'} : v; render(); });
+function navKey(){ return {home:'home', rules:'rules', topic:'rules', enc:'enc', encrun:'enc', oral:'oral', oralrun:'oral', oralres:'oral', about:'about'}[view.name] || 'home'; }
+function renderNav(){
+  const k = navKey();
+  const b = NAV.map(([id,l]) => `<button type="button" data-nav="${id}" ${k===id?'aria-current="page"':''}>${ICON[id]}<span>${l}</span></button>`).join('');
+  $('tabs').innerHTML = b; $('botnav').innerHTML = b;
+  if(k==='about') $('about-btn').setAttribute('aria-current','page'); else $('about-btn').removeAttribute('aria-current');
+}
+/* contact helpers */
+function mailHref(subject, body){ return CT.email ? `mailto:${CT.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}` : ''; }
+function waHref(text){ return WA ? `https://wa.me/${WA}?text=${encodeURIComponent(text)}` : ''; }
+function reportHTML(id, label){
+  const m = mailHref(`MWM Orals: possible mistake in ${id}`, `Item: ${id} (${label})\n\nWhat looks wrong:\n\nWhat it should say (rule reference if you have one):\n`);
+  const w = waHref(`MWM Orals: possible mistake in ${id} (${label}). `);
+  if(!m && !w) return '';
+  return `<div class="report"><span>Spotted a mistake in ${esc(id)}?</span>${w?`<a href="${w}" target="_blank" rel="noopener">Tell us on WhatsApp</a>`:''}${m?`<a href="${m}">Email us</a>`:''}</div>`;
+}
+function coachHTML(){
+  const w = waHref('Hello Maro, I would like to book a live mock OOW oral.');
+  const m = mailHref('Booking a live mock OOW oral', 'Hello Maro,\n\nI would like to book a live mock OOW oral. My exam date is:\n');
+  if(!w && !m) return '';
+  return `<section class="cta"><div><h3>Want a live mock oral?</h3><p>Sit a one-to-one mock OOW oral online with a Master Mariner, with feedback on every answer.</p></div><a class="btn" href="${w||m}" ${w?'target="_blank" rel="noopener"':''}>${w?'Book on WhatsApp':'Book by email'}</a></section>`;
+}
+function copyLink(btn, url){
+  const done=()=>{ btn.textContent='Link copied'; setTimeout(()=>{ if(btn.isConnected) btn.textContent=btn.dataset.label; },2000); };
+  try{ navigator.clipboard.writeText(url).then(done).catch(()=>fallback()); }catch(e){ fallback(); }
+  function fallback(){ const i=document.createElement('input'); i.className='urlbox'; i.value=url; i.readOnly=true; btn.replaceWith(i); i.focus(); i.select(); }
+}
+function shareRow(id, label){
+  return `<div class="row"><button class="linkbtn" type="button" data-copy="${esc(SITE+'#'+id)}" data-label="Copy link to ${esc(label)}">Copy link to ${esc(label)}</button></div>`;
+}
+document.addEventListener('click', e => { const b=e.target.closest('[data-copy]'); if(b){ copyLink(b, b.dataset.copy); } });
+function renderFoot(){
+  $('foot').innerHTML = `<div class="links"><span>© 2026 Maritime With Maro</span><a href="#about" data-nav="about">About</a><a href="${esc(SITE)}privacy.html" target="_blank" rel="noopener">Privacy</a><a href="${esc(SITE)}terms.html" target="_blank" rel="noopener">Terms of use</a>${CT.youtube?`<a href="${esc(CT.youtube)}" target="_blank" rel="noopener">YouTube</a>`:''}</div><p>Study aid only. Not affiliated with the MCA or IMO.</p>`;
+}
+document.addEventListener('click', e => {
+  const n = e.target.closest('[data-nav]'); if(n){ e.preventDefault(); go(n.dataset.nav); return; }
+});
+$('brand').onclick = () => go('home');
+
+function render(){
+  renderNav();
+  const m = $('main');
+  stopLamps();
+  if(view.name==='oralrun' && !session) view={name:'oral'};
+  if(view.name==='oralres' && !view.param) view={name:'oral'};
+  ({home:vHome, rules:vRules, topic:vTopic, enc:vEnc, encrun:vEncRun, oral:vOral, oralrun:vOralRun, oralres:vOralRes, about:vAbout}[view.name] || vHome)(m);
+  startLamps();
+}
+
+/* ================= PICTURES (buoys, lights, shapes) ================= */
+const PS = C.pictureStyle, PAINT = PS.paint, LIGHT = PS.light, SEQ = PS.rhythms;
+const BODY={
+  pillar:{paths:['M244,276 L396,276 Q392,300 320,302 Q248,300 244,276 Z','M276,280 L364,280 L346,128 L294,128 Z'],x0:244,x1:396,y0:128,y1:302,top:110,yb:92,band:[190,240]},
+  can:{paths:['M268,176 L372,176 L372,288 Q320,300 268,288 Z'],x0:268,x1:372,y0:166,y1:300,top:166,yb:136,band:[208,244]},
+  cone:{paths:['M320,150 L380,286 Q320,300 260,286 Z'],x0:260,x1:380,y0:150,y1:300,top:150,yb:126,band:[214,250]}
+};
+const TOPH={can:34,coneUp:34,N:58,S:58,E:56,W:56,'2sph':54,sph:34,X:44,cross:52};
+const STK='stroke="rgba(18,22,28,.6)" stroke-width="1.5"';
+function topmark(t,c,yb){
+  const p=PAINT[c]; const tri=(a,apex)=>`<path d="M300,${a} L340,${a} L320,${apex} Z" fill="${p}" ${STK}/>`;
+  switch(t){
+    case 'can': return `<rect x="303" y="${yb-34}" width="34" height="34" rx="2" fill="${p}" ${STK}/>`;
+    case 'coneUp': return tri(yb,yb-34);
+    case 'N': return tri(yb,yb-26)+tri(yb-32,yb-58);
+    case 'S': return tri(yb-26,yb)+tri(yb-58,yb-32);
+    case 'E': return tri(yb-30,yb-56)+tri(yb-28,yb-2);
+    case 'W': return tri(yb-56,yb-30)+tri(yb-2,yb-28);
+    case '2sph': return `<circle cx="320" cy="${yb-13}" r="12" fill="${p}" ${STK}/><circle cx="320" cy="${yb-41}" r="12" fill="${p}" ${STK}/>`;
+    case 'sph': return `<circle cx="320" cy="${yb-17}" r="16" fill="${p}" ${STK}/>`;
+    case 'X': { const y=yb-24; return `<g stroke-linecap="square"><path d="M305,${y-15} L335,${y+15} M335,${y-15} L305,${y+15}" stroke="rgba(18,22,28,.7)" stroke-width="10"/><path d="M305,${y-15} L335,${y+15} M335,${y-15} L305,${y+15}" stroke="${p}" stroke-width="7"/></g>`; }
+    case 'cross': { const y=yb-26; return `<g stroke-linecap="square"><path d="M320,${y-24} L320,${y+24} M298,${y} L342,${y}" stroke="rgba(18,22,28,.7)" stroke-width="10"/><path d="M320,${y-24} L320,${y+24} M298,${y} L342,${y}" stroke="${p}" stroke-width="7"/></g>`; }
+  } return '';
+}
+function seaWaves(){ return [300,318,338].map((y,i)=>`<path d="M${40+i*30},${y} q24,-6 48,0 t48,0 M${380-i*20},${y+6} q24,-6 48,0 t48,0" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-linecap="round"/>`).join(''); }
+function buoySVG(b,u){
+  const B=BODY[b.body], w=B.x1-B.x0, h=B.y1-B.y0; let fill='';
+  if(b.fill.t==='solid') fill=`<rect x="${B.x0}" y="${B.y0-12}" width="${w}" height="${h+14}" fill="${PAINT[b.fill.c]}"/>`;
+  else if(b.fill.t==='band') fill=`<rect x="${B.x0}" y="${B.y0-12}" width="${w}" height="${h+14}" fill="${PAINT[b.fill.c]}"/><rect x="${B.x0}" y="${B.band[0]}" width="${w}" height="${B.band[1]-B.band[0]}" fill="${PAINT[b.fill.b]}"/>`;
+  else if(b.fill.t==='h'){ const n=b.fill.c.length, bh=h/n; fill=b.fill.c.map((c,i)=>`<rect x="${B.x0}" y="${(B.y0+i*bh-(i===0?12:0)).toFixed(1)}" width="${w}" height="${(bh+(i===0?12:0)+0.6).toFixed(1)}" fill="${PAINT[c]}"/>`).join(''); }
+  else if(b.fill.t==='v'){ const n=b.fill.n, sw=w/n; fill=Array.from({length:n},(_,i)=>`<rect x="${(B.x0+i*sw).toFixed(1)}" y="${B.y0-12}" width="${(sw+0.6).toFixed(1)}" height="${h+14}" fill="${PAINT[b.fill.c[i%2]]}"/>`).join(''); }
+  const clip=B.paths.map(d=>`<path d="${d}"/>`).join(''), outline=B.paths.map(d=>`<path d="${d}" fill="none" ${STK}/>`).join('');
+  const canTop=b.body==='can'?`<ellipse cx="320" cy="176" rx="52" ry="10" fill="${PAINT[b.fill.c]}" ${STK}/><ellipse cx="320" cy="176" rx="52" ry="10" fill="url(#shade-${u})"/>`:'';
+  const lantern=b.body==='pillar'?`<rect x="308" y="110" width="24" height="18" rx="2" fill="#2E3338"/><rect x="312" y="113" width="16" height="8" rx="1" fill="#A9C0CE" opacity=".85"/>`:'';
+  const poleTop=B.yb-(TOPH[b.top]||30);
+  return `<svg viewBox="0 0 640 360" role="img" aria-label="A buoy by daylight"><defs>
+<linearGradient id="sky-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9D2E3"/><stop offset="1" stop-color="#E8F0F4"/></linearGradient>
+<linearGradient id="sea-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5B93AE"/><stop offset="1" stop-color="#1D4860"/></linearGradient>
+<linearGradient id="shade-${u}" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></linearGradient>
+<clipPath id="clip-${u}">${clip}</clipPath></defs>
+<rect width="640" height="236" fill="url(#sky-${u})"/>
+<path d="M0,236 L0,226 C60,220 110,214 170,222 C230,229 270,218 330,221 C400,225 440,213 520,219 C570,223 610,220 640,224 L640,236 Z" fill="#8FA8B5" opacity=".55"/>
+<rect y="236" width="640" height="124" fill="url(#sea-${u})"/>
+<line x1="320" y1="${B.top}" x2="320" y2="${poleTop+4}" stroke="#2E3338" stroke-width="4"/>${topmark(b.top,b.tc,B.yb)}${lantern}
+<g clip-path="url(#clip-${u})">${fill}<rect x="${B.x0}" y="${B.y0-12}" width="${w}" height="${h+14}" fill="url(#shade-${u})"/></g>${outline}${canTop}
+<rect y="286" width="640" height="74" fill="url(#sea-${u})" opacity=".93"/>
+<path d="M0,286 q20,-4 40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>${seaWaves()}</svg>`;
+}
+const HULLS={
+  shipBeam:{s:['M80,226 L560,226 L596,214 L572,266 L98,266 Z','M112,226 L112,160 L200,160 L200,226 Z','M104,156 L208,156 L208,164 L104,164 Z','M126,160 L129,134 L153,134 L156,160 Z','M230,226 L540,226 L540,214 L230,214 Z'],l:['M440,214 L440,130','M176,156 L176,76','M572,214 L572,150','M88,226 L88,196']},
+  shipHead:{s:['M244,226 L244,162 L396,162 L396,226 Z','M222,156 L418,156 L418,164 L222,164 Z','M270,226 L370,226 L352,266 L288,266 Z'],l:['M320,226 L320,130','M320,156 L320,76']},
+  shipStern:{s:['M244,226 L244,150 L396,150 L396,226 Z','M224,144 L416,144 L416,152 L224,152 Z','M300,150 L303,118 L337,118 L340,150 Z','M266,226 L374,226 L362,266 L278,266 Z'],l:['M320,118 L320,76']},
+  smallHead:{s:['M292,240 L348,240 L340,266 L300,266 Z','M276,240 L276,206 L364,206 L364,240 Z'],l:['M320,206 L320,110']},
+  smallBeam:{s:['M200,236 L440,236 L470,226 L452,266 L212,266 Z','M380,236 L380,196 L432,196 L432,236 Z'],l:['M406,196 L406,110','M220,236 L220,190 L256,190 L256,236','M238,190 L238,100']},
+  yachtHead:{s:['M296,244 L344,244 L334,266 L306,266 Z','M320,90 L330,236 L320,236 Z'],l:['M320,244 L320,80']},
+  yachtBeam:{s:['M240,244 L400,244 L420,236 L404,266 L254,266 Z','M318,94 L318,238 L246,238 Z','M322,94 L396,236 L322,236 Z'],l:['M320,244 L320,84']},
+  tugTow:{s:['M392,236 L520,236 L546,228 L530,266 L398,266 Z','M436,236 L436,200 L492,200 L492,236 Z','M40,240 L196,240 L196,266 L52,266 Z'],l:['M466,200 L466,110','M394,250 Q300,272 196,250']},
+  towAstern:{s:['M200,236 L340,236 L334,268 L206,268 Z','M392,240 L436,240 L432,258 L396,258 Z','M400,240 L400,222 L428,222 L428,240 Z'],l:['M414,222 L414,200','M336,246 Q370,262 396,252']},
+  hoverHead:{s:['M250,248 Q320,272 390,248 L384,236 L256,236 Z','M262,236 L262,206 L378,206 L378,236 Z'],l:['M276,206 L276,180','M364,206 L364,180','M320,206 L320,112']},
+  mineHead:{s:['M270,236 L370,236 L356,266 L284,266 Z','M262,236 L262,190 L378,190 L378,236 Z'],l:['M320,190 L320,78','M270,122 L370,122']}
+};
+function haloDefs(u){ return Object.entries(LIGHT).map(([k,v])=>`<radialGradient id="h-${k}-${u}"><stop offset="0" stop-color="rgb(${v.halo})" stop-opacity=".9"/><stop offset=".35" stop-color="rgb(${v.halo})" stop-opacity=".38"/><stop offset="1" stop-color="rgb(${v.halo})" stop-opacity="0"/></radialGradient>`).join(''); }
+function lampSVG(L,big,u,size){
+  const halo=size?size*2.6:(big?36:17), core=size||(big?8:6.5), c=LIGHT[L.c];
+  const refl=big?`<ellipse cx="${L.x}" cy="${L.y+54}" rx="6" ry="24" fill="url(#h-${L.c}-${u})" opacity=".55"/>`:'';
+  return `<g class="lamp"${L.seq?` data-seq="${L.seq}"`:''}>${refl}<circle cx="${L.x}" cy="${L.y}" r="${halo}" fill="url(#h-${L.c}-${u})"/><circle cx="${L.x}" cy="${L.y}" r="${core}" fill="${c.core}"/><circle cx="${L.x-1.2}" cy="${L.y-1.2}" r="${core*.38}" fill="#fff" opacity=".7"/></g>`;
+}
+function nightBg(u, horizon){ return `<defs>${haloDefs(u)}<linearGradient id="nsky-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#02040A"/><stop offset="1" stop-color="#0B1526"/></linearGradient><linearGradient id="nsea-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#060B15"/><stop offset="1" stop-color="#020408"/></linearGradient></defs>
+<rect width="640" height="${horizon}" fill="url(#nsky-${u})"/><rect y="${horizon}" width="640" height="${360-horizon}" fill="url(#nsea-${u})"/><line x1="0" y1="${horizon}" x2="640" y2="${horizon}" stroke="rgba(140,172,214,.16)"/>`; }
+function nightSVG(card,u,outline){
+  const big=card.cat==='night', H=card.hull?HULLS[card.hull]:null;
+  const hull=H?`<g class="hull" style="opacity:${outline?1:0}" fill="rgba(120,146,182,.12)" stroke="rgba(160,186,222,.6)" stroke-width="1.6" stroke-linejoin="round">${H.s.map(d=>`<path d="${d}"/>`).join('')}${H.l.map(d=>`<path d="${d}" fill="none"/>`).join('')}</g>`:'';
+  const inner=hull+card.lamps.map(L=>lampSVG(L,big,u)).join('');
+  return `<svg viewBox="0 0 640 360" data-t0="${performance.now()}" role="img" aria-label="${big?'A light at night':'A vessel’s lights at night'}">${nightBg(u,270)}${card.flip?`<g transform="translate(640,0) scale(-1,1)">${inner}</g>`:`<g>${inner}</g>`}</svg>`;
+}
+const VC={hull:'#33414E',boot:'#8E2C2C',sup:'#EEF1F3',supS:'rgba(40,50,60,.55)',mast:'#2B333B',win:'#41505E',shape:'#14171B'};
+function winRow(x0,x1,y,step,w,h){ let s=''; for(let x=x0;x<=x1;x+=step) s+=`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${VC.win}"/>`; return s; }
+const ln=(x1,y1,x2,y2,w)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${VC.mast}" stroke-width="${w}" stroke-linecap="round"/>`;
+const VESSELS={
+  ship:()=>`<path d="M64,224 L566,224 L606,206 L586,272 L84,272 Z" fill="${VC.hull}"/><path d="M78,256 L590,256 L586,272 L84,272 Z" fill="${VC.boot}"/><rect x="214" y="210" width="330" height="14" fill="#5B6772"/><rect x="352" y="198" width="30" height="12" fill="#5B6772"/><rect x="96" y="156" width="108" height="68" fill="${VC.sup}" stroke="${VC.supS}"/><rect x="86" y="148" width="128" height="9" fill="${VC.sup}" stroke="${VC.supS}"/>${winRow(106,190,166,16,9,6)}${winRow(106,190,184,16,9,6)}${winRow(106,190,202,16,9,6)}<path d="M112,148 L116,116 L152,116 L154,148 Z" fill="#3C4A57"/><rect x="115" y="122" width="38" height="7" fill="#C9472F"/>${ln(176,148,176,14,4)}${ln(166,30,226,30,3)}${ln(548,208,548,104,4)}${ln(538,118,570,118,3)}`,
+  shipHead:()=>`<path d="M256,222 L384,222 L362,272 L278,272 Z" fill="${VC.hull}"/><path d="M266,256 L374,256 L362,272 L278,272 Z" fill="${VC.boot}"/><rect x="236" y="158" width="168" height="64" fill="${VC.sup}" stroke="${VC.supS}"/><rect x="212" y="152" width="216" height="8" fill="${VC.sup}" stroke="${VC.supS}"/>${winRow(248,392,170,18,10,7)}${winRow(248,392,190,18,10,7)}${ln(320,152,320,6,4)}${ln(244,30,396,30,3)}`,
+  fisher:()=>`<path d="M150,236 L462,236 L498,220 L480,270 L166,270 Z" fill="#245675"/><path d="M154,250 L486,250" stroke="#EEF1F3" stroke-width="3"/><rect x="370" y="184" width="76" height="52" fill="${VC.sup}" stroke="${VC.supS}"/><rect x="378" y="192" width="62" height="10" fill="${VC.win}"/>${ln(410,184,410,50,4)}${ln(400,62,440,62,3)}<path d="M178,236 L196,166 L214,236" fill="none" stroke="${VC.mast}" stroke-width="4" stroke-linejoin="round"/><path d="M196,170 L70,262 M196,170 L92,264" stroke="rgba(30,34,40,.7)" stroke-width="1.4"/>`,
+  fisherHead:()=>`<path d="M272,232 L368,232 L352,270 L288,270 Z" fill="#245675"/><rect x="262" y="184" width="116" height="48" fill="${VC.sup}" stroke="${VC.supS}"/><rect x="272" y="192" width="96" height="12" fill="${VC.win}"/>${ln(320,184,320,30,4)}${ln(264,46,376,46,3)}`,
+  tow:()=>`<path d="M408,240 L538,240 L568,226 L550,270 L418,270 Z" fill="#2E3338"/><path d="M410,245 L560,245" stroke="#111" stroke-width="5"/><rect x="448" y="196" width="64" height="44" fill="${VC.sup}" stroke="${VC.supS}"/><rect x="456" y="204" width="48" height="10" fill="${VC.win}"/>${ln(480,196,480,58,4)}${ln(450,72,512,72,3)}<path d="M28,242 L230,242 L222,270 L38,270 Z" fill="#4E5A63"/><rect x="48" y="214" width="158" height="28" fill="#8A939A" stroke="${VC.supS}"/>${ln(128,214,128,140,3)}<path d="M412,252 Q318,282 228,252" fill="none" stroke="rgba(30,34,40,.8)" stroke-width="1.6"/>`,
+  yacht:()=>`<path d="M212,246 L426,246 L454,234 L434,270 L228,270 Z" fill="#1F3550"/><path d="M314,52 L314,238 L222,238 Z" fill="#FAFAF6" stroke="rgba(40,50,60,.35)"/><path d="M322,56 L446,238 L322,238 Z" fill="#FAFAF6" stroke="rgba(40,50,60,.35)"/>${ln(318,246,318,44,3)}${ln(318,96,348,96,2)}`,
+  diver:()=>`<path d="M222,248 L400,248 L428,236 L408,270 L236,270 Z" fill="#D9DEE2" stroke="rgba(40,50,60,.5)"/><rect x="292" y="222" width="46" height="26" fill="#5E6A74"/>${ln(316,248,316,118,3)}<rect x="318" y="122" width="32" height="48" fill="#FFFFFF" stroke="#2B333B" stroke-width="1.5"/><path d="M350,122 L394,122 L372,146 L394,170 L350,170 Z" fill="#1F4FA6" stroke="#2B333B" stroke-width="1.5"/>`
+};
+const SH_H={ball:24,coneUp:24,coneDown:24,diamond:44,cyl:44,twoCones:48}, SH_GAP=10;
+function shapeSVG(t,x,y){
+  const S=VC.shape, hl='rgba(255,255,255,.18)';
+  switch(t){
+    case 'ball': return `<circle cx="${x}" cy="${y+12}" r="12" fill="${S}"/><circle cx="${x-4}" cy="${y+8}" r="3.5" fill="${hl}"/>`;
+    case 'coneUp': return `<path d="M${x},${y} L${x+12},${y+24} L${x-12},${y+24} Z" fill="${S}"/>`;
+    case 'coneDown': return `<path d="M${x-12},${y} L${x+12},${y} L${x},${y+24} Z" fill="${S}"/>`;
+    case 'diamond': return `<path d="M${x},${y} L${x+12},${y+22} L${x},${y+44} L${x-12},${y+22} Z" fill="${S}"/>`;
+    case 'cyl': return `<rect x="${x-12}" y="${y+3}" width="24" height="38" fill="${S}"/><ellipse cx="${x}" cy="${y+41}" rx="12" ry="3.5" fill="${S}"/><ellipse cx="${x}" cy="${y+3}" rx="12" ry="3.5" fill="#30363D"/>`;
+    case 'twoCones': return `<path d="M${x-12},${y} L${x+12},${y} L${x},${y+24} Z M${x},${y+24} L${x+12},${y+48} L${x-12},${y+48} Z" fill="${S}"/>`;
+  } return '';
+}
+function stackSVG([x,y,list]){ let cy=y, out=''; list.forEach((t,i)=>{ out+=shapeSVG(t,x,cy); cy+=SH_H[t]+(i<list.length-1?SH_GAP:0); }); return `<line x1="${x}" y1="${y-8}" x2="${x}" y2="${cy}" stroke="rgba(30,34,40,.75)" stroke-width="1.2"/>${out}`; }
+function daySVG(card,u){
+  return `<svg viewBox="0 0 640 360" role="img" aria-label="A vessel by daylight"><defs><linearGradient id="dsky-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B9D2E3"/><stop offset="1" stop-color="#E8F0F4"/></linearGradient><linearGradient id="dsea-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5B93AE"/><stop offset="1" stop-color="#1D4860"/></linearGradient></defs>
+<rect width="640" height="240" fill="url(#dsky-${u})"/><path d="M0,240 L0,230 C60,224 110,218 170,226 C230,233 270,222 330,225 C400,229 440,217 520,223 C570,227 610,224 640,228 L640,240 Z" fill="#8FA8B5" opacity=".55"/><rect y="240" width="640" height="120" fill="url(#dsea-${u})"/>
+${VESSELS[card.ves]()}${card.st.map(stackSVG).join('')}<rect y="262" width="640" height="98" fill="url(#dsea-${u})" opacity=".95"/><path d="M0,262 q20,-4 40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0 t40,0" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="2"/>${seaWaves()}</svg>`;
+}
+function picSVG(card,outline){ const u=uid(); if(card.cat==='day') return buoySVG(card.buoy,u); if(card.cat==='shapes') return daySVG(card,u); return nightSVG(card,u,outline); }
+function rhythmSVG(card){
+  const seqs=(card.lamps||[]).filter(L=>L.seq).map(L=>({c:L.c,seq:SEQ[L.seq]})); if(!seqs.length) return '';
+  const period=seqs[0].seq.reduce((a,s)=>a+s[0],0), win=period<4000?Math.ceil(5000/period)*period:period;
+  const X0=10,X1=630,sc=(X1-X0)/win; let bars='';
+  seqs.forEach(({c,seq})=>{ let t=0; while(t<win){ for(const [ms,on] of seq){ if(on&&t<win){ const w=Math.min(ms,win-t)*sc; bars+=`<rect x="${(X0+t*sc).toFixed(1)}" y="14" width="${Math.max(w,1.5).toFixed(1)}" height="22" rx="1.5" ${c==='W'?'class="bar-W"':`fill="${LIGHT[c].core}" stroke="rgba(0,0,0,.25)"`}/>`;} t+=ms; } } });
+  const step=win>12000?2000:1000; let ticks='';
+  for(let t=0;t<=win;t+=step){ const x=(X0+t*sc).toFixed(1); ticks+=`<line class="ax" x1="${x}" y1="40" x2="${x}" y2="45"/><text class="lbl" x="${x}" y="58" text-anchor="${t===0?'start':(t===win?'end':'middle')}">${t/1000}${t===win?' s':''}</text>`; }
+  return `<svg viewBox="0 0 640 66" role="img" aria-label="Light rhythm diagram"><line class="ax" x1="${X0}" y1="40" x2="${X1}" y2="40"/>${bars}${ticks}</svg>`;
+}
+/* blinking */
+let rafId=null;
+function lampTick(now){
+  document.querySelectorAll('svg[data-t0]').forEach(svg=>{
+    const t=now-Number(svg.dataset.t0);
+    svg.querySelectorAll('.lamp[data-seq]').forEach(el=>{ const seq=SEQ[el.dataset.seq]; if(!seq) return; const per=seq.reduce((a,s)=>a+s[0],0); let m=t%per,on=0; for(const [ms,o] of seq){ if(m<ms){on=o;break;} m-=ms; } el.style.opacity=on?1:0; });
+  });
+  rafId=requestAnimationFrame(lampTick);
+}
+function startLamps(){ if(!rafId) rafId=requestAnimationFrame(lampTick); }
+function stopLamps(){ if(rafId){ cancelAnimationFrame(rafId); rafId=null; } }
+function answerBlock(card){
+  return `<div class="ans"><h3>${esc(card.title)}</h3>${card.char?`<p class="char">${esc(card.char)}</p>`:''}<p>${esc(card.sum)}</p>
+  <dl class="facts">${(card.facts||[]).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('')}</dl>${card.cat==='night'?`<div class="rhythm">${rhythmSVG(card)}</div>`:''}</div>`;
+}
+
+/* picture viewer (from study topics) */
+function openPicture(pid){
+  const card=PBY[pid]; if(!card) return;
+  const root=$('modal-root');
+  root.innerHTML=`<div class="modal" role="dialog" aria-modal="true" aria-label="Picture ${esc(card.id)}"><div class="box">
+    <div class="mh"><span class="eyebrow">${esc(card.id)} · ${esc(TAGS[card.tag])}</span><button class="btn ghost" type="button" data-close>Close</button></div>
+    <div class="stage" id="pv-stage">${picSVG(card,false)}</div>
+    ${card.scen?`<p class="ctx muted">${esc(card.scen)}</p>`:''}<p class="qtext" style="font-size:19px;font-weight:600">${esc(card.q)}</p>
+    <div class="row"><button class="btn primary" type="button" id="pv-reveal">Reveal answer</button>${card.cat==='ships'?'<button class="btn" type="button" id="pv-outline">Show outline</button>':''}</div>
+    <div id="pv-ans" hidden>${answerBlock(card)}<div class="sec" style="margin-top:12px"><h3 style="font-size:20px;margin-bottom:6px">Examiner follow-ups</h3>${qaList(card.follow)}</div>${reportHTML('picture '+card.id, card.title)}</div>
+  </div></div>`;
+  const close=()=>{ root.innerHTML=''; document.removeEventListener('keydown',onKey); };
+  const onKey=e=>{ if(e.key==='Escape') close(); };
+  document.addEventListener('keydown',onKey);
+  root.querySelector('[data-close]').onclick=close;
+  root.querySelector('.modal').addEventListener('click',e=>{ if(e.target.classList.contains('modal')) close(); });
+  $('pv-reveal').onclick=()=>{ $('pv-ans').hidden=false; $('pv-reveal').hidden=true; const h=root.querySelector('.hull'); if(h) h.style.opacity=1; };
+  const ob=$('pv-outline'); if(ob) ob.onclick=()=>{ const h=root.querySelector('.hull'); if(h){ const on=h.style.opacity!=='1'; h.style.opacity=on?1:0; ob.textContent=on?'Hide outline':'Show outline'; } };
+  startLamps();
+}
+function qaList(list){
+  return (list||[]).map((x,i)=>`<div class="qa"><p class="q">${esc(x.q)}</p><button class="reveal" type="button" data-reveal="1">Show answer</button><p class="a" hidden>${esc(x.a)}</p></div>`).join('');
+}
+document.addEventListener('click',e=>{ const r=e.target.closest('[data-reveal]'); if(r){ const a=r.nextElementSibling; if(a){ a.hidden=false; r.remove(); } } });
+
+/* ================= SOUND ================= */
+let actx=null, playing=false;
+function playPattern(pattern, gapMs, btn){
+  if(playing) return;
+  try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+  if(actx.state==='suspended') actx.resume();
+  const sm=C.meta.sound, gap=(gapMs||sm.gapMs)/1000; let t=actx.currentTime+0.15;
+  const master=actx.createGain(); master.gain.value=0.22; master.connect(actx.destination);
+  const lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1100; lp.connect(master);
+  [...pattern].forEach((ch,i)=>{
+    const d=(ch==='P'?sm.prolongedMs:sm.shortMs)/1000;
+    [[138,'sawtooth',.55],[207,'sawtooth',.35],[276,'triangle',.25]].forEach(([f,type,amp])=>{
+      const o=actx.createOscillator(), g=actx.createGain(); o.type=type; o.frequency.value=f;
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(amp,t+0.06); g.gain.setValueAtTime(amp,t+d-0.08); g.gain.linearRampToValueAtTime(0,t+d);
+      o.connect(g); g.connect(lp); o.start(t); o.stop(t+d+0.05);
+    });
+    t+=d+gap;
+  });
+  playing=true; if(btn){ btn.disabled=true; btn.textContent='Playing…'; }
+  setTimeout(()=>{ playing=false; if(btn&&btn.isConnected){ btn.disabled=false; btn.textContent='Play again'; } }, (t-actx.currentTime)*1000);
+}
+function patternText(p){ return [...p].map(c=>c==='P'?'prolonged':'short').join(', '); }
+
+/* ================= RADAR + VISUAL (encounters) ================= */
+const rad=d=>d*Math.PI/180, uv=d=>[Math.sin(rad(d)),Math.cos(rad(d))];
+function encVectors(e){
+  const vo=uv(e.own.course).map(c=>c*e.own.speed), vt=uv(e.target.course).map(c=>c*e.target.speed);
+  const p=uv(e.target.bearing).map(c=>c*e.target.range);
+  return {vo,vt,vr:[vt[0]-vo[0],vt[1]-vo[1]],p};
+}
+function radarSVG(e){
+  const cx=200,cy=200,R=180; let scale=12, rings=2;
+  if(e.target){ const r=e.target.range; scale = r<=2.6?3:r<=5.2?6:r<=7.2?8:12; }
+  rings = scale===3?0.5:scale===6?1:2;
+  const k=R/scale;
+  let s=`<svg viewBox="0 0 400 400" role="img" aria-label="Radar display, north up, relative motion"><defs><radialGradient id="scope"><stop offset="0" stop-color="#062419"/><stop offset="1" stop-color="#03140E"/></radialGradient></defs>
+  <rect width="400" height="400" fill="#05100D"/><circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#scope)" stroke="#2C6B53" stroke-width="1.5"/>`;
+  for(let r=rings;r<scale-1e-6;r+=rings) s+=`<circle cx="${cx}" cy="${cy}" r="${(r*k).toFixed(1)}" fill="none" stroke="rgba(90,220,160,.22)"/>`;
+  for(let b=0;b<360;b+=10){ const [x,y]=uv(b), l=b%30===0?10:5; s+=`<line x1="${cx+x*(R-l)}" y1="${cy-y*(R-l)}" x2="${cx+x*R}" y2="${cy-y*R}" stroke="rgba(110,230,170,.5)"/>`; }
+  [['000',0],['090',90],['180',180],['270',270]].forEach(([t,b])=>{ const [x,y]=uv(b); s+=`<text x="${cx+x*(R+12)}" y="${cy-y*(R+12)+4}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7FD9AE">${t}</text>`; });
+  const [hx,hy]=uv(e.own.course);
+  s+=`<line x1="${cx}" y1="${cy}" x2="${cx+hx*R}" y2="${cy-hy*R}" stroke="#BFF5DA" stroke-width="1.4"/>`;
+  const ov=uv(e.own.course).map(c=>c*e.own.speed*0.1*k);
+  s+=`<line x1="${cx}" y1="${cy}" x2="${cx+ov[0]}" y2="${cy-ov[1]}" stroke="#E8F7A0" stroke-width="2" stroke-dasharray="4 3"/><circle cx="${cx}" cy="${cy}" r="3" fill="#BFF5DA"/>`;
+  if(e.target){
+    const {vt,vr,p}=encVectors(e);
+    for(let m=6;m>=1;m--){ const q=[p[0]-vr[0]*m/60,p[1]-vr[1]*m/60]; s+=`<circle cx="${(cx+q[0]*k).toFixed(1)}" cy="${(cy-q[1]*k).toFixed(1)}" r="${(3.2-m*0.3).toFixed(1)}" fill="#59F0A6" opacity="${(0.75-m*0.1).toFixed(2)}"/>`; }
+    const ex=cx+p[0]*k, ey=cy-p[1]*k;
+    s+=`<ellipse cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" rx="5.5" ry="4" fill="#8DFFC6" transform="rotate(${e.target.bearing} ${ex.toFixed(1)} ${ey.toFixed(1)})"/>`;
+    s+=`<circle cx="${ex.toFixed(1)}" cy="${ey.toFixed(1)}" r="10" fill="none" stroke="#E8F7A0" stroke-width="1.4"/>`;
+    const tv=[vt[0]*0.1*k, vt[1]*0.1*k];
+    s+=`<line x1="${ex.toFixed(1)}" y1="${ey.toFixed(1)}" x2="${(ex+tv[0]).toFixed(1)}" y2="${(ey-tv[1]).toFixed(1)}" stroke="#E8F7A0" stroke-width="2"/>`;
+    s+=`<text x="${(ex+13).toFixed(1)}" y="${(ey-11).toFixed(1)}" font-family="IBM Plex Mono,monospace" font-size="11" fill="#E8F7A0">1</text>`;
+  }
+  s+=`<text x="10" y="18" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7FD9AE">N UP  RM  ${scale} NM</text><text x="10" y="34" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7FD9AE">RINGS ${rings} NM</text><text x="390" y="18" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7FD9AE">VECT 6 MIN TRUE</text><text x="390" y="34" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="11" fill="#7FD9AE">TRAILS REL</text></svg>`;
+  return {svg:s, scale, rings};
+}
+/* lights from aspect: geometry in metres along (s, fwd +) and across (t, starboard +), height h */
+const VDEF={
+  power50:{L:200,lights:[{s:60,t:0,h:24,c:'W',arc:'mast'},{s:-40,t:0,h:34,c:'W',arc:'mast'},{s:-42,t:16,h:20,c:'G',arc:'stbd'},{s:-42,t:-16,h:20,c:'R',arc:'port'},{s:-100,t:0,h:10,c:'W',arc:'stern'}]},
+  small:{L:15,lights:[{s:2,t:0,h:6,c:'W',arc:'mast'},{s:0,t:2,h:3.5,c:'G',arc:'stbd'},{s:0,t:-2,h:3.5,c:'R',arc:'port'},{s:-7.5,t:0,h:2,c:'W',arc:'stern'}]},
+  sailing:{L:14,lights:[{s:0,t:0,h:16,c:'R',arc:'all'},{s:0,t:0,h:14.6,c:'G',arc:'all'},{s:6,t:1.5,h:1.4,c:'G',arc:'stbd'},{s:6,t:-1.5,h:1.4,c:'R',arc:'port'},{s:-7,t:0,h:1.2,c:'W',arc:'stern'}]},
+  nuc:{L:150,lights:[{s:-30,t:0,h:30,c:'R',arc:'all'},{s:-30,t:0,h:26,c:'R',arc:'all'},{s:-45,t:12,h:17,c:'G',arc:'stbd'},{s:-45,t:-12,h:17,c:'R',arc:'port'},{s:-75,t:0,h:9,c:'W',arc:'stern'}]},
+  trawler:{L:30,lights:[{s:5,t:0,h:10,c:'G',arc:'all'},{s:5,t:0,h:8.4,c:'W',arc:'all'},{s:2,t:4,h:5,c:'G',arc:'stbd'},{s:2,t:-4,h:5,c:'R',arc:'port'},{s:-15,t:0,h:3,c:'W',arc:'stern'}]}
+};
+function arcVisible(arc,b){ // b = own ship's bearing from target, relative to target's heading
+  const eps=2.5;
+  if(arc==='all') return true;
+  if(arc==='mast') return b<=112.5||b>=247.5;
+  if(arc==='stbd') return b<=112.5||b>=360-eps;
+  if(arc==='port') return b>=247.5||b<=eps;
+  if(arc==='stern') return b>112.5&&b<247.5;
+  return false;
+}
+function visualSVG(e){
+  const def=VDEF[e.target.type]; if(!def) return '';
+  const u=uid(), beta=e.arpa.aspect, d=rad(180-beta);
+  const hmax=Math.max(...def.lights.map(l=>l.h)), kh=300/def.L, kv=150/hmax, hz=262;
+  const lamps=def.lights.filter(l=>arcVisible(l.arc,beta)).map(l=>({x:320+(l.s*Math.sin(d)+l.t*Math.cos(d))*kh, y:hz-l.h*kv-6, c:l.c}));
+  return `<svg viewBox="0 0 640 360" role="img" aria-label="Night view of the other vessel's lights">${nightBg(u,hz)}${lamps.map(L=>lampSVG(L,false,u,6.5)).join('')}</svg>`;
+}
+
+/* ================= VIEWS ================= */
+function pct(a,b){ return b?Math.round(a*100/b):0; }
+function weakTags(){
+  return Object.entries(S.tags).filter(([t,v])=>v.n>=2 && TAGS[t]).map(([t,v])=>({t,p:Math.round(v.sum*100/v.n),n:v.n})).filter(x=>x.p<75).sort((a,b)=>a.p-b.p).slice(0,4);
+}
+function firstTopicForTag(tag){ return TOPICS.find(t=>t.tag===tag && !S.studied[t.id]) || TOPICS.find(t=>t.tag===tag); }
+
+function vHome(m){
+  const studied=TOPICS.filter(t=>S.studied[t.id]).length, encOk=ENC.filter(e=>S.enc[e.id]&&S.enc[e.id].ok).length;
+  const last=S.oral[0], best=S.oral.length?Math.max(...S.oral.map(o=>o.pct)):null;
+  const weak=weakTags();
+  m.innerHTML=`
+  <section class="hero">
+    <div class="intro">
+      <span class="eyebrow">MCA OOW (Unlimited) oral · COLREGs and IALA buoyage</span>
+      <h1>Know the Rules well enough to explain them to an examiner</h1>
+      <p class="lead">Study every rule in plain English, work through radar and night encounters, then sit a mock oral with examiner-style follow-up questions.</p>
+      <div class="row"><button class="btn primary" type="button" data-nav="oral">Start a mock oral</button><button class="btn" type="button" data-nav="rules">Study the Rules</button></div>
+    </div>
+    <div class="panel meters" aria-label="Your progress">
+      <span class="eyebrow">Your progress on this device</span>
+      <div class="meter"><div class="lab"><span>Rules and buoyage topics studied</span><b>${studied} / ${TOPICS.length}</b></div><div class="bar"><i style="width:${pct(studied,TOPICS.length)}%"></i></div></div>
+      <div class="meter"><div class="lab"><span>Encounters solved</span><b>${encOk} / ${ENC.length}</b></div><div class="bar"><i style="width:${pct(encOk,ENC.length)}%"></i></div></div>
+      <div class="meter"><div class="lab"><span>Mock orals sat</span><b>${S.oral.length}${best!=null?` · best ${best}%`:''}</b></div><div class="bar"><i style="width:${best||0}%"></i></div></div>
+      ${last?`<p class="small muted">Last mock oral: ${last.pct}%, ${esc(last.verdict)} (${esc(last.date)})</p>`:'<p class="small muted">No mock oral yet. Your scores will show here.</p>'}
+    </div>
+  </section>
+  <section class="modes">
+    <button class="mode" type="button" data-nav="rules"><span class="ic">${iconBig('rules')}</span><span><h2>Study the Rules</h2><p>All 41 rules, the four annexes and ten buoyage topics, each with key points, examiner questions and a quick check.</p><p class="go">${TOPICS.length-studied} topics to go</p></span></button>
+    <button class="mode" type="button" data-nav="enc"><span class="ic">${iconBig('enc')}</span><span><h2>Encounter trainer</h2><p>Read the radar and the other vessel's lights, name the situation, then choose your action.</p><p class="go">${ENC.length} encounters, clear and fog</p></span></button>
+    <button class="mode" type="button" data-nav="oral"><span class="ic">${iconBig('oral')}</span><span><h2>Mock oral</h2><p>Twelve questions with follow-ups. Answer out loud, reveal, and mark yourself honestly.</p><p class="go">About 25 minutes</p></span></button>
+  </section>
+  <section class="stack" style="gap:10px">
+    <h2 style="font-size:24px">Weak areas</h2>
+    ${weak.length?`<div class="weak">${weak.map(w=>`<button type="button" data-weak="${w.t}">${esc(TAGS[w.t])} <b>${w.p}%</b></button>`).join('')}</div><p class="small muted">Based on your quick checks, encounters and mock oral marks. Tap one to study it.</p>`:'<p class="empty">Nothing flagged yet. Areas where you score under 75% will appear here.</p>'}
+  </section>
+  ${coachHTML()}
+  <p class="disclaimer">${esc(C.meta.disclaimer)}</p>`;
+  m.querySelectorAll('[data-weak]').forEach(b=>b.onclick=()=>{ const t=firstTopicForTag(b.dataset.weak); if(t) go('topic',t.id); });
+}
+function iconBig(k){ return ICON[k].replace('<svg ','<svg width="28" height="28" style="color:#FF9A66" '); }
+
+let ruleFilter='all';
+function topicState(t){ const c=S.checks[t.id]; return {studied:!!S.studied[t.id], check:c===undefined?null:c}; }
+function vRules(m){
+  const groups=C.groups.map(g=>({g,items:TOPICS.filter(t=>t.group===g.id)})).map(x=>({...x,items:x.items.filter(t=>{ const s=topicState(t); return ruleFilter==='all'||(ruleFilter==='todo'&&!s.studied)||(ruleFilter==='missed'&&s.check===false); })})).filter(x=>x.items.length);
+  m.innerHTML=`
+  <div class="stack" style="gap:8px"><span class="eyebrow">Study</span><h1 style="font-size:40px">The Rules and buoyage</h1><p class="lead muted">Plain-English notes for every COLREG rule and annex, and the IALA system. Mark each topic studied once you can explain it without notes.</p></div>
+  <div class="filters" role="group" aria-label="Filter topics">
+    ${[['all','All topics'],['todo','Not studied yet'],['missed','Missed quick check']].map(([k,l])=>`<button type="button" data-f="${k}" aria-pressed="${ruleFilter===k}">${l}</button>`).join('')}
+  </div>
+  ${groups.length?groups.map(({g,items})=>`<section class="group"><div><h2>${esc(g.title)}</h2><p class="gsub">${esc(g.range)}</p></div><div class="tlist">${items.map(t=>{ const s=topicState(t); return `<button class="trow" type="button" data-topic="${t.id}"><span class="n">${esc(t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)}</span><span class="tt">${esc(t.title)}</span><span class="st">${s.studied?'<span class="pill ok">Studied</span>':''}${s.check===true?'<span class="pill ok">Check passed</span>':s.check===false?'<span class="pill bad">Check missed</span>':''}</span></button>`; }).join('')}</div></section>`).join(''):'<p class="empty">No topics match this filter.</p>'}`;
+  m.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ ruleFilter=b.dataset.f; vRules(m); });
+  m.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>go('topic',b.dataset.topic));
+}
+
+function vTopic(m){
+  const t=TBY[view.param]; if(!t){ go('rules'); return; }
+  const i=TOPICS.indexOf(t), prev=TOPICS[i-1], next=TOPICS[i+1], s=topicState(t);
+  const order=shuffle(t.check.options.map((o,k)=>k));
+  m.innerHTML=`
+  <div class="crumb"><button class="back" type="button" data-nav="rules">&larr; All topics</button></div>
+  <div class="topic-head"><span class="num">${esc(t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)} · ${esc(TAGS[t.tag])}</span><h1>${esc(t.title)}</h1></div>
+  <div class="cols">
+    <div class="stack">
+      <p class="lead">${esc(t.summary)}</p>
+      <section class="sec"><h3>Key points</h3><ul class="points">${t.points.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></section>
+      ${t.pictures&&t.pictures.length?`<section class="sec"><h3>See it</h3><div class="thumbs">${t.pictures.map(pid=>{ const c=PBY[pid]; return `<button class="thumb" type="button" data-pic="${pid}"><span class="pic">${picSVG(c,false)}</span><span>${esc(pid)} · tap to test yourself</span></button>`; }).join('')}</div></section>`:''}
+      <section class="sec"><h3>The examiner may ask</h3>${qaList(t.ask)}</section>
+    </div>
+    <div class="stack">
+      <section class="panel step" id="check"><span class="eyebrow">Quick check</span><p style="font-weight:600">${esc(t.check.q)}</p>
+        <div class="mcq">${order.map((k,j)=>`<button class="opt" type="button" data-k="${k}"><span class="k">${'ABCD'[j]}</span><span>${esc(t.check.options[k])}</span></button>`).join('')}</div>
+        <div id="check-fb"></div></section>
+      <section class="panel step"><span class="eyebrow">Progress</span>
+        <button class="btn ${s.studied?'':'primary'}" type="button" id="mark">${s.studied?'Studied: tap to undo':'Mark as studied'}</button>
+        <p class="small muted">Mark it once you could explain this topic to an examiner without notes.</p></section>
+      <section class="panel step"><span class="eyebrow">Share or report</span>${shareRow(t.id, t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)}${reportHTML(t.id, t.title)||'<p class="small muted">Send this topic to a classmate with the link above.</p>'}</section>
+    </div>
+  </div>
+  <div class="pager">${prev?`<button class="btn" type="button" data-topic="${prev.id}">&larr; ${esc(prev.group==='ANX'||prev.group==='BUOY'?prev.num:'Rule '+prev.num)}</button>`:'<span></span>'}${next?`<button class="btn" type="button" data-topic="${next.id}">${esc(next.group==='ANX'||next.group==='BUOY'?next.num:'Rule '+next.num)} &rarr;</button>`:''}</div>`;
+  m.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>go('topic',b.dataset.topic));
+  m.querySelectorAll('[data-pic]').forEach(b=>b.onclick=()=>openPicture(b.dataset.pic));
+  $('mark').onclick=()=>{ if(S.studied[t.id]) delete S.studied[t.id]; else S.studied[t.id]=Date.now(); save(); vTopic(m); };
+  m.querySelectorAll('#check .opt').forEach(b=>b.onclick=()=>{
+    const k=Number(b.dataset.k), ok=k===t.check.answer;
+    m.querySelectorAll('#check .opt').forEach(x=>{ x.disabled=true; const kk=Number(x.dataset.k); if(kk===t.check.answer) x.classList.add('right'); else if(kk===k) x.classList.add('wrong'); });
+    $('check-fb').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Correct.':'Not quite.'}</b><span>${esc(t.check.why)}</span></div>`;
+    if(S.checks[t.id]===undefined) tagScore(t.tag, ok?1:0);
+    S.checks[t.id]=ok; save();
+  });
+}
+
+/* ---- encounters ---- */
+function vEnc(m){
+  m.innerHTML=`
+  <div class="stack" style="gap:8px"><span class="eyebrow">Encounter trainer</span><h1 style="font-size:40px">Read the situation, then act</h1>
+  <p class="lead muted">Each encounter gives you the radar picture with ARPA data and, at night, the lights you would see. Name the situation first, then choose your action.</p></div>
+  <div class="row"><button class="btn primary" type="button" id="enc-next">${ENC.some(e=>!S.enc[e.id])?'Start the next new encounter':'Start a random encounter'}</button></div>
+  <div class="elist">${ENC.map(e=>{ const r=S.enc[e.id]; return `<button class="ecard" type="button" data-enc="${e.id}"><span class="top"><span class="id">${e.id}</span>${r?(r.ok?'<span class="pill ok">Solved</span>':'<span class="pill bad">Try again</span>'):'<span class="pill">New</span>'}</span><span class="tl">${esc(e.title)}</span><span class="row"><span class="pill ${e.vis==='fog'?'warn':'acc'}">${e.vis==='fog'?'Restricted visibility':'Night, in sight'}</span>${e.area!=='open'?`<span class="pill">${e.area==='tss'?'TSS':'Narrow channel'}</span>`:''}</span></button>`; }).join('')}</div>`;
+  m.querySelectorAll('[data-enc]').forEach(b=>b.onclick=()=>go('encrun',b.dataset.enc));
+  $('enc-next').onclick=()=>{ const n=ENC.find(e=>!S.enc[e.id])||ENC[Math.floor(Math.random()*ENC.length)]; go('encrun',n.id); };
+}
+function encPanels(e){
+  const r=radarSVG(e);
+  const vis=e.vis==='night'&&e.target?visualSVG(e):'';
+  const tile=(k,v)=>`<div><dt>${k}</dt><dd>${v}</dd></div>`;
+  const arpa=e.target?`<dl class="arpa" aria-label="ARPA data, target 1 and own ship">${tile('BRG',e.target.bearing.toFixed(1)+'°')}${tile('RNG',e.target.range.toFixed(2)+' nm')}${tile('COG',String(e.target.course).padStart(3,'0')+'°')}${tile('SOG',e.target.speed.toFixed(1)+' kn')}${tile('CPA',e.arpa.cpa.toFixed(2)+' nm')}${tile('TCPA',e.arpa.tcpa.toFixed(1)+' min')}${tile('Own HDG',String(e.own.course).padStart(3,'0')+'°')}${tile('Own SPD',e.own.speed.toFixed(1)+' kn')}${tile('Visibility',e.vis==='fog'?'Restricted':'Clear night')}</dl>`:'';
+  return `<div class="scope-wrap ${vis?'':'single'}">
+    <div class="instr">${r.svg}<div class="cap"><span>X-BAND · NORTH UP · REL MOTION</span><span>${r.scale} NM / ${r.rings} NM RINGS</span></div></div>
+    ${vis?`<div class="instr night"><div>${vis}</div><div class="cap"><span>VISUAL · BEARING ${e.target.bearing.toFixed(0).padStart(3,'0')}°</span><span>${e.target.range.toFixed(1)} NM</span></div></div>`:''}
+  </div>${arpa}`;
+}
+function mcqHTML(id,opts,order){ return `<div class="mcq" id="${id}">${order.map((k,j)=>`<button class="opt" type="button" data-k="${k}"><span class="k">${'ABCD'[j]}</span><span>${esc(opts[k])}</span></button>`).join('')}</div>`; }
+function vEncRun(m){
+  const e=EBY[view.param]; if(!e){ go('enc'); return; }
+  const i=ENC.indexOf(e), next=ENC[(i+1)%ENC.length];
+  const o1=shuffle(e.situation.options.map((_,k)=>k)), o2=shuffle(e.action.options.map((_,k)=>k));
+  let first=null, second=null;
+  m.innerHTML=`
+  <div class="crumb"><button class="back" type="button" data-nav="enc">&larr; All encounters</button><span class="pill ${e.vis==='fog'?'warn':'acc'}">${e.vis==='fog'?'Restricted visibility':'Night, in sight'}</span></div>
+  <div class="topic-head"><span class="num">${e.id}</span><h1>${esc(e.title)}</h1></div>
+  <p class="lead">${esc(e.brief)}</p>
+  ${e.sound?`<div class="row"><button class="btn primary playbtn" type="button" id="play">Play the signal</button><span class="small muted">Sound on. Short blast 1 s, prolonged 4 s.</span></div>`:''}
+  ${encPanels(e)}
+  <section class="panel step" id="s1"><span class="eyebrow">Step 1 of 2</span><h3>What is the situation?</h3>${mcqHTML('mcq1',e.situation.options,o1)}<div id="fb1"></div></section>
+  <section class="panel step" id="s2" hidden><span class="eyebrow">Step 2 of 2</span><h3>What do you do?</h3>${mcqHTML('mcq2',e.action.options,o2)}<div id="fb2"></div></section>
+  <div id="enc-share" hidden class="stack" style="gap:6px">${shareRow(e.id, 'encounter '+e.id)}${reportHTML('encounter '+e.id, e.title)}</div>
+  <div class="pager" id="enc-pager" hidden><button class="btn" type="button" id="retry">Try this one again</button><button class="btn primary" type="button" data-enc="${next.id}">Next encounter: ${next.id} &rarr;</button></div>`;
+  const pb=$('play'); if(pb) pb.onclick=()=>playPattern(e.sound,null,pb);
+  const wire=(id,spec,cb)=>m.querySelectorAll(`#${id} .opt`).forEach(b=>b.onclick=()=>{
+    const k=Number(b.dataset.k), ok=k===spec.answer;
+    m.querySelectorAll(`#${id} .opt`).forEach(x=>{ x.disabled=true; const kk=Number(x.dataset.k); if(kk===spec.answer) x.classList.add('right'); else if(kk===k) x.classList.add('wrong'); });
+    cb(ok);
+  });
+  wire('mcq1',e.situation,ok=>{ first=ok; $('fb1').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Correct.':'Not quite.'}</b><span>The situation is: ${esc(e.situation.options[e.situation.answer])}.</span></div>`; $('s2').hidden=false; $('s2').scrollIntoView({behavior:'smooth',block:'nearest'}); });
+  wire('mcq2',e.action,ok=>{
+    second=ok;
+    $('fb2').innerHTML=`<div class="fb ${ok?'ok':'bad'}"><b>${ok?'Correct.':'Not quite.'} ${e.critical&&!ok?'<span class="pill bad">Safety-critical</span>':''}</b><span>${esc(e.explain)}</span><span class="small"><b>Rules:</b> ${e.rules.map(esc).join(', ')}</span></div>`;
+    const solved=first&&second, prevRec=S.enc[e.id];
+    if(!prevRec) tagScore(e.tag, solved?1:0);
+    S.enc[e.id]={ok:solved||(prevRec&&prevRec.ok)||false, tries:(prevRec?prevRec.tries:0)+1, last:solved}; save();
+    $('enc-pager').hidden=false; $('enc-share').hidden=false;
+  });
+  m.querySelectorAll('[data-enc]').forEach(b=>b.onclick=()=>go('encrun',b.dataset.enc));
+  $('retry').onclick=()=>go('encrun',e.id);
+}
+
+/* ---- mock oral ---- */
+let session=null;
+function buildSession(){
+  const mix=C.meta.mockOral.mix, items=[];
+  const add=(arr,n,kind)=>pick(arr,n).forEach(x=>items.push({kind,ref:x.id}));
+  add(PICS.filter(p=>p.tag==='buoyage'),mix['picture-buoyage'],'picture');
+  add(PICS.filter(p=>p.tag==='lights'),mix['picture-lights'],'picture');
+  add(PICS.filter(p=>p.tag==='shapes'),mix['picture-shapes'],'picture');
+  add(VERB.filter(v=>v.tag==='buoyage'),mix['verbal-buoyage'],'verbal');
+  const vc=VERB.filter(v=>v.tag!=='buoyage'), crit=pick(vc.filter(v=>v.critical&&v.tag==='rv'),1);
+  crit.forEach(x=>items.push({kind:'verbal',ref:x.id}));
+  add(vc.filter(v=>!crit.includes(v)),mix['verbal-colregs']-crit.length,'verbal');
+  add(SND,mix.sound,'sound');
+  add(ENC,mix.encounter,'encounter');
+  const opening=items.find(x=>x.kind==='verbal');
+  const rest=shuffle(items.filter(x=>x!==opening));
+  const q=[opening,...rest].map(it=>{
+    let follow=[];
+    if(it.kind==='picture') follow=pick(PBY[it.ref].follow,2);
+    if(it.kind==='verbal') follow=VBY[it.ref].follow;
+    if(it.kind==='sound') follow=SBY[it.ref].follow.slice(0,2);
+    return {...it, follow, marks:[]};
+  });
+  return {q, i:0, f:-1, revealed:false, started:Date.now()};
+}
+function itemMeta(it){
+  if(it.kind==='picture'){ const p=PBY[it.ref]; return {tag:p.tag, critical:false, label:'Picture '+p.id}; }
+  if(it.kind==='verbal'){ const v=VBY[it.ref]; return {tag:v.tag, critical:v.critical, label:v.id}; }
+  if(it.kind==='sound'){ const s=SBY[it.ref]; return {tag:'sound', critical:false, label:'Sound signal'}; }
+  const e=EBY[it.ref]; return {tag:e.tag, critical:e.critical, label:'Encounter '+e.id};
+}
+function vOral(m){
+  m.innerHTML=`
+  <div class="stack" style="gap:8px"><span class="eyebrow">Mock oral</span><h1 style="font-size:40px">Sit a mock oral</h1>
+  <p class="lead muted">Twelve questions drawn from pictures, sound signals, encounters and the Rules, each followed by the examiner's probing questions.</p></div>
+  <div class="cols">
+    <div class="panel stack">
+      <h3 style="font-size:24px">How it works</h3>
+      <ul class="points">
+        <li>Answer every question out loud, in full sentences, as you would to the examiner.</li>
+        <li>Then reveal the model answer and mark yourself honestly: got it, partly, or missed.</li>
+        <li>Follow-up questions come straight after, the way an examiner digs deeper.</li>
+        <li>Questions marked safety-critical are ones where a wrong answer can end an oral on its own.</li>
+      </ul>
+      <div class="row"><button class="btn primary" type="button" id="start">Start mock oral</button><span class="small muted">About 25 minutes. Sound on for signal questions.</span></div>
+    </div>
+    <div class="panel stack">
+      <h3 style="font-size:24px">Your past results</h3>
+      ${S.oral.length?`<div class="hist">${S.oral.slice(0,8).map(o=>`<div class="hr"><span>${esc(o.date)}</span><span class="mono">${o.pct}%</span><span>${esc(o.verdict)}${o.critical?' · <span class="pill bad">critical miss</span>':''}</span></div>`).join('')}</div>`:'<p class="empty">No mock orals yet. Your results will be listed here.</p>'}
+    </div>
+  </div>`;
+  $('start').onclick=()=>{ session=buildSession(); go('oralrun'); };
+}
+function questionBody(it){
+  if(it.kind==='picture'){ const p=PBY[it.ref]; return {media:`<div class="stage">${picSVG(p,false)}</div>`, ctx:p.scen, q:p.q, a:`<p><b>${esc(p.title)}</b>${p.char?` <span class="mono" style="color:var(--accent)">${esc(p.char)}</span>`:''}</p><p>${esc(p.sum)}</p>`}; }
+  if(it.kind==='verbal'){ const v=VBY[it.ref]; return {media:'', ctx:'', q:v.q, a:`<p>${esc(v.a)}</p>${v.rules?`<p class="small muted">Rules: ${esc(v.rules)}</p>`:''}`}; }
+  if(it.kind==='sound'){ const s=SBY[it.ref]; return {media:`<div class="row"><button class="btn primary" type="button" id="oplay">Play the signal</button><span class="small muted">Listen as many times as you need.</span></div>`, ctx:s.context, q:s.q, a:`<p>${esc(s.a)}</p><p class="small muted">Signal: ${esc(patternText(s.pattern))}. Rule ${esc(s.rules)}.</p>`}; }
+  const e=EBY[it.ref]; return {media:(e.sound?`<div class="row"><button class="btn primary" type="button" id="oplay">Play the signal</button></div>`:'')+encPanels(e), ctx:e.brief, q:'What is the situation, and what action do you take?', a:`<p><b>${esc(e.situation.options[e.situation.answer])}.</b> ${esc(e.action.options[e.action.answer])}.</p><p>${esc(e.explain)}</p>`};
+}
+function vOralRun(m){
+  if(!session){ go('oral'); return; }
+  const it=session.q[session.i], meta=itemMeta(it), isF=session.f>=0;
+  const total=session.q.length, done=session.i;
+  let body, qtext, ctx='', media='';
+  if(!isF){ body=questionBody(it); qtext=body.q; ctx=body.ctx; media=body.media; }
+  else { const f=it.follow[session.f]; qtext=f.q; body={a:`<p>${esc(f.a)}</p>`}; }
+  m.innerHTML=`
+  <div class="oral-top"><span class="eyebrow">Question ${done+1} of ${total}${isF?` · follow-up ${session.f+1} of ${it.follow.length}`:''}</span>
+    <div class="prog"><div class="bar"><i style="width:${pct(done,total)}%"></i></div></div>
+    <button class="btn ghost" type="button" id="quit">End oral</button></div>
+  <section class="panel qcard">
+    <div class="row">${isF?'<span class="follow-tag">Examiner follow-up</span>':`<span class="pill acc">${esc(TAGS[meta.tag])}</span>`}${meta.critical&&!isF?'<span class="pill bad">Safety-critical</span>':''}</div>
+    ${media}
+    ${ctx?`<p class="ctx">${esc(ctx)}</p>`:''}
+    <p class="qtext">${esc(qtext)}</p>
+    ${session.revealed?`<div class="ans">${body.a}${reportHTML(it.ref+(isF?' follow-up '+(session.f+1):''), isF?it.follow[session.f].q:itemMeta(it).label)}</div>
+      <div><p class="small muted" style="margin-bottom:8px">How did your spoken answer compare?</p>
+      <div class="marks"><button class="m-got" type="button" data-mark="got">Got it</button><button class="m-partly" type="button" data-mark="partly">Partly</button><button class="m-missed" type="button" data-mark="missed">Missed</button></div></div>`
+    :`<div class="row"><button class="btn primary" type="button" id="rev">I've answered: show the model answer</button></div>`}
+  </section>`;
+  const pb=$('oplay'); if(pb){ const pat=it.kind==='sound'?SBY[it.ref].pattern:EBY[it.ref].sound, gap=it.kind==='sound'?SBY[it.ref].gapMs:null; pb.onclick=()=>playPattern(pat,gap,pb); }
+  const rv=$('rev'); if(rv) rv.onclick=()=>{ session.revealed=true; vOralRun(m); startLamps(); };
+  $('quit').onclick=()=>{ if(session.q.some(x=>x.marks.length)) finishOral(); else { session=null; go('oral'); } };
+  m.querySelectorAll('[data-mark]').forEach(b=>b.onclick=()=>{
+    it.marks.push(b.dataset.mark);
+    if(session.f+1<it.follow.length){ session.f++; } else { session.i++; session.f=-1; }
+    session.revealed=false;
+    if(session.i>=total) finishOral(); else { vOralRun(m); window.scrollTo(0,0); startLamps(); }
+  });
+}
+function finishOral(){
+  const pts=C.meta.mockOral.marks; let got=0,max=0; const byTag={}; let critical=[];
+  session.q.forEach(it=>{
+    if(!it.marks.length) return;
+    const meta=itemMeta(it);
+    it.marks.forEach((mk,j)=>{ got+=pts[mk]; max+=2; const t=byTag[meta.tag]||(byTag[meta.tag]={got:0,max:0}); t.got+=pts[mk]; t.max+=2; tagScore(meta.tag, pts[mk]/2); });
+    if(meta.critical && it.marks[0]==='missed') critical.push(it);
+  });
+  const p=pct(got,max), verdict=C.meta.mockOral.verdicts.find(v=>p>=v.min).label;
+  const d=new Date(), date=d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});
+  const result={date, pct:p, verdict, critical:critical.length, byTag, items:session.q.map(it=>({kind:it.kind,ref:it.ref,marks:it.marks}))};
+  S.oral.unshift(result); S.oral=S.oral.slice(0,20); save();
+  session=null; go('oralres', result);
+}
+function relatedTopic(it){
+  if(it.kind==='picture'){ return TOPICS.find(t=>(t.pictures||[]).includes(it.ref)); }
+  if(it.kind==='verbal'){ const v=VBY[it.ref]; const n=String(v.rules).match(/\d+/); if(v.tag==='buoyage') return TOPICS.find(t=>t.group==='BUOY'); if(n) return TBY['R'+n[0]]; if(/Annex IV/.test(v.rules)) return TBY.AX4; if(/Annex II/.test(v.rules)) return TBY.AX2; }
+  if(it.kind==='sound'){ return TBY['R'+String(SBY[it.ref].rules).match(/\d+/)[0]]; }
+  if(it.kind==='encounter'){ const n=String(EBY[it.ref].rules[0]).match(/\d+/); return n?TBY['R'+n[0]]:null; }
+  return null;
+}
+function itemTitle(it){
+  if(it.kind==='picture') return PBY[it.ref].title;
+  if(it.kind==='verbal') return VBY[it.ref].q;
+  if(it.kind==='sound') return 'Sound signal: '+SBY[it.ref].a;
+  return EBY[it.ref].title;
+}
+function vOralRes(m){
+  const r=view.param; if(!r){ go('oral'); return; }
+  const missed=r.items.filter(it=>it.marks.length&&it.marks.some(x=>x!=='got'));
+  const tags=Object.entries(r.byTag).map(([t,v])=>({t,p:pct(v.got,v.max)})).sort((a,b)=>a.p-b.p);
+  m.innerHTML=`
+  <div class="crumb"><button class="back" type="button" data-nav="oral">&larr; Mock oral</button></div>
+  <section class="panel stack">
+    <span class="eyebrow">Mock oral result · ${esc(r.date)}</span>
+    <div class="score"><span class="big">${r.pct}%</span><h2 style="font-size:30px">${esc(r.verdict)}</h2></div>
+    ${r.critical?`<div class="fb bad"><b>${r.critical} safety-critical question${r.critical>1?'s':''} missed.</b><span>In a real oral an unsafe answer on collision avoidance can fail you whatever your overall score. Study these first.</span></div>`:''}
+    <p class="small muted">Scored from your own marks: got it 2, partly 1, missed 0, across every question and follow-up. This is a study guide, not an MCA pass mark.</p>
+  </section>
+  <div class="cols">
+    <section class="panel stack"><h3 style="font-size:24px">By topic</h3><div class="tagbars">${tags.map(x=>`<div><div class="lab"><span>${esc(TAGS[x.t])}</span><span class="mono">${x.p}%</span></div><div class="bar"><i class="${x.p>=80?'ok':x.p>=60?'warn':'bad'}" style="width:${x.p}%"></i></div></div>`).join('')}</div></section>
+    <section class="panel stack"><h3 style="font-size:24px">Review these</h3>${missed.length?`<div class="review">${missed.map(it=>{ const t=relatedTopic(it); return `<div class="it"><span class="pill ${it.marks[0]==='missed'?'bad':'warn'}">${it.marks[0]==='missed'?'Missed':'Partly'}</span><span><span style="font-weight:500">${esc(itemTitle(it))}</span>${t?`<br><button class="back" type="button" data-topic="${t.id}">Study ${esc(t.group==='ANX'||t.group==='BUOY'?t.num:'Rule '+t.num)}: ${esc(t.title)} &rarr;</button>`:''}</span></div>`; }).join('')}</div>`:'<p class="empty">Nothing to review: every question marked got it.</p>'}</section>
+  </div>
+  ${coachHTML()}
+  <div class="row"><button class="btn primary" type="button" id="again">Sit another mock oral</button><button class="btn" type="button" data-nav="home">Back to home</button></div>`;
+  m.querySelectorAll('[data-topic]').forEach(b=>b.onclick=()=>go('topic',b.dataset.topic));
+  $('again').onclick=()=>{ session=buildSession(); go('oralrun'); };
+}
+
+let resetArmed=false;
+function vAbout(m){
+  const pwa = !!window.MWM_PWA, inst = window.__mwmInstall;
+  const email = CT.email ? `<a href="mailto:${esc(CT.email)}">${esc(CT.email)}</a>` : '';
+  m.innerHTML=`
+  <div class="stack about" style="gap:8px"><span class="eyebrow">About</span><h1 style="font-size:40px">About MWM Orals</h1>
+  <p class="lead">A free study aid for the MCA Officer of the Watch (Unlimited) oral exam, focused on the COLREGs and IALA buoyage. Made by Maritime With Maro.</p></div>
+  <div class="cols about">
+    <div class="stack">
+      <section class="sec"><h2>Who made it</h2>
+        <p>MWM Orals is written by ${esc(CT.author||'Maritime With Maro')}, who coaches candidates for their MCA oral exams.</p>
+        <p>The notes are plain-English summaries of the COLREGs 1972 (as amended) and the IALA Maritime Buoyage System, organised around the OOW oral syllabus in MCA MIN 653. Every encounter answer is checked against the geometry of the situation: bearings, aspect, CPA and TCPA.</p></section>
+      <section class="sec"><h2>How to use it</h2><ul class="points">
+        <li>Study one Part of the Rules at a time and mark each topic studied only when you could explain it without notes.</li>
+        <li>Work through the encounters until you get both steps right first time.</li>
+        <li>Sit a mock oral every few days, out loud, and study whatever comes up as a weak area.</li></ul></section>
+      ${pwa?`<section class="sec"><h2>Install it on your phone</h2>
+        ${inst?`<div class="row"><button class="btn primary" type="button" id="install">Install MWM Orals</button></div>`:''}
+        <p><b>Android (Chrome):</b> open the menu (three dots), then <b>Install app</b> or <b>Add to Home screen</b>.</p>
+        <p><b>iPhone (Safari):</b> tap <b>Share</b>, then <b>Add to Home Screen</b>.</p>
+        <p class="small muted">After your first visit it works offline, at sea or in the exam centre waiting room.</p></section>`:''}
+      <section class="sec"><h2>Share it</h2><p>Send it to a classmate, a cadet or your crew.</p>
+        <div class="row"><button class="btn" type="button" data-copy="${esc(SITE)}" data-label="Copy the website link">Copy the website link</button>${navigator.share?'<button class="btn" type="button" id="share">Share…</button>':''}</div></section>
+    </div>
+    <div class="stack">
+      ${coachHTML()}
+      <section class="panel stack"><h3 style="font-size:22px">Contact and corrections</h3>
+        <p>If you think a note or answer is wrong, please tell us with the topic or question ID (for example R19 or E05) and a rule reference.</p>
+        ${email?`<p>Email: ${email}</p>`:''}${WA?`<p><a class="linkbtn" href="${waHref('Hello Maro, about MWM Orals: ')}" target="_blank" rel="noopener">Message us on WhatsApp</a></p>`:''}
+        ${CT.youtube?`<p><a class="linkbtn" href="${esc(CT.youtube)}" target="_blank" rel="noopener">Watch Maritime With Maro on YouTube</a></p>`:''}</section>
+      <section class="panel stack"><h3 style="font-size:22px">Terms of use</h3><ul class="points small">
+        <li>MWM Orals is a study aid only. Do not use it for navigation or watchkeeping decisions.</li>
+        <li>It may contain errors. Always check the official COLREGs text, the IALA system and your company procedures.</li>
+        <li>Not affiliated with or endorsed by the MCA or IMO. Passing a mock oral here is no guarantee of passing the real one.</li>
+        <li>Notes, questions and drawings © 2026 Maritime With Maro.</li></ul>
+        <p class="small"><a href="${esc(SITE)}terms.html" target="_blank" rel="noopener">Full terms of use</a> · <a href="${esc(SITE)}privacy.html" target="_blank" rel="noopener">Privacy policy</a></p></section>
+      <section class="panel stack"><h3 style="font-size:22px">Your data</h3>
+        <p class="small">Your progress is saved only in this browser on this device. Nothing is sent anywhere.</p>
+        <div class="row"><button class="btn" type="button" id="reset">Reset my progress</button><span class="small muted" id="reset-note"></span></div>
+        <p class="small muted">Study notes version ${esc(C.meta.version)}, updated ${esc(C.meta.updated)}.</p></section>
+    </div>
+  </div>`;
+  const ib=$('install'); if(ib) ib.onclick=async()=>{ try{ inst.prompt(); await inst.userChoice; }catch(e){} window.__mwmInstall=null; vAbout(m); };
+  const sb=$('share'); if(sb) sb.onclick=()=>{ navigator.share({title:'MWM Orals', text:'COLREGs and buoyage practice for the MCA OOW oral', url:SITE}).catch(()=>{}); };
+  $('reset').onclick=()=>{
+    if(!resetArmed){ resetArmed=true; $('reset').textContent='Tap again to delete all progress'; $('reset-note').textContent='This cannot be undone.'; return; }
+    resetArmed=false; S={studied:{}, checks:{}, enc:{}, tags:{}, oral:[]}; save(); $('reset').textContent='Reset my progress'; $('reset-note').textContent='Progress deleted.';
+  };
+}
+window.MWM_RENDER={picSVG,radarSVG,visualSVG,PBY,EBY};
+renderFoot();
+render();
+}
+})();
+</script>
+</body>
+</html>

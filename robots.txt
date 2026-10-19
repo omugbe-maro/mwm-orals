@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://omugbe-maro.github.io/mwm-orals/sitemap.xml
